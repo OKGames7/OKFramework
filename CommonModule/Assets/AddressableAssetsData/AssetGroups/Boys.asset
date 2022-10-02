@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Boys
+  m_EditorClassIdentifier: 
+  m_GroupName: Boys
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 37610027d872f4cebba95c762ce61d6a
+  m_SerializeEntries:
+  - m_GUID: 629b0705ff99c436ba9d8d46917151db
+    m_Address: onepiece02_zoro_bandana
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Boys
+  - m_GUID: e1035e05bb1c6424380457ff22b6b30d
+    m_Address: onepiece06_chopper
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Boys
+  - m_GUID: 5524dcaf57a904e9784131e31d77709b
+    m_Address: onepiece01_luffy
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Boys
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: cc5c3834b33fa4d4c954d9267378af1f, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: b3b697761b5204d77ac0014f450b4367, type: 2}
+    - {fileID: 11400000, guid: fc07468cf12c641a0a8673dde6afc525, type: 2}

@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Girls
+  m_EditorClassIdentifier: 
+  m_GroupName: Girls
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 27968626778c24d229f79f5a52e78e86
+  m_SerializeEntries:
+  - m_GUID: 366ee521265d0420188125e27b3a2c5b
+    m_Address: onepiece07_robin
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Girls
+  - m_GUID: 922643f1b17024242bfc03f51e5dd943
+    m_Address: onepiece03_nami
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Girls
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: cc5c3834b33fa4d4c954d9267378af1f, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 66d92a374aff248d8a13bed17310c7df, type: 2}
+    - {fileID: 11400000, guid: 92522f5ddaa434c01be85917be547bc7, type: 2}

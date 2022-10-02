@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: CommonModule
+  m_EditorClassIdentifier: 
+  m_GroupName: CommonModule
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 6e8b85a786fc244b18767e9a5c35ef06
+  m_SerializeEntries:
+  - m_GUID: 8fb379362a38f4c0db0650fc36dbb2cd
+    m_Address: TapEffect
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - CommonModule
+  - m_GUID: 9a9848fc609334eeb8b2f9c9f6adaf8c
+    m_Address: DebugManager
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - CommonModule
+  - m_GUID: fef7a1ddaa0e74a71900e49c7860a1eb
+    m_Address: NowLoading
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - CommonModule
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: cc5c3834b33fa4d4c954d9267378af1f, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 6046011424a404eabb6cefa921a4de4e, type: 2}
+    - {fileID: 11400000, guid: 8060af37790c045438f9c0c4115042d6, type: 2}

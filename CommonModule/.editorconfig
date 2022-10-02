@@ -1,0 +1,118 @@
+# EditorConfig is awesome: https://EditorConfig.org
+
+# top-most EditorConfig file.
+root = true
+
+# 全ファイルが設定対象.
+[*]
+# 空白はスペース.
+indent_style = space
+# インデントは4スペース.
+indent_size = 4
+# 文字コードはUTF-8.
+charset = utf-8
+# 改行コードはLF.
+end_of_line = lf
+
+# 行末の空白文字は削除する.
+trim_trailing_whitespace = true
+# ファイル末尾が改行文字でないときに改行文字にさせない.
+insert_final_newline = false
+
+# コードを記述するファイルの設定.
+[*.{cs,csx,vb,vbx}]
+insert_final_newline = true
+
+
+###############################
+# .NET コード規約     #
+###############################
+[*.{cs,vb}]
+# IDE0055: Fix formatting.
+dotnet_diagnostic.IDE0055.severity = warning
+
+# thisを使わないとだめ.
+dotnet_diagnostic.SA1101.severity = none
+# Usingがnamespceの中にないとだめ(→外でもよいので規則外に).
+dotnet_diagnostic.SA1200.severity = none
+# フィールドのprivate変数をキャメルケースにしないとだめ.
+dotnet_diagnostic.SA1309.severity = warning
+# プロパティはパスカルケースでかかないとだめ(コメントの書き方も決まっていてwarningにすると意図しないところでwarningが出るのでnone).
+dotnet_diagnostic.SA1623.severity = none
+# コメントの末尾はピリオドで終わっていないとダメ.
+dotnet_diagnostic.SA1629.severity = warning
+# ファイルに標準ファイルヘッダーがないとだめ(不要なのでnone).
+dotnet_diagnostic.SA1633.severity = none
+# コンストラクタにXMLコメントでようやくテキストが含まれていないとダメ(不要なのでNone).
+dotnet_diagnostic.SA1642.severity = none
+
+#using関係.
+# usingの並びをアルファベット順に並び替えする.
+dotnet_sort_system_directives_first = true
+# usingのグループ間に改行を配置しない
+dotnet_separate_import_directive_groups
+
+# this. preferences.
+dotnet_style_qualification_for_property = false:warning
+dotnet_style_qualification_for_method = false:warning
+dotnet_style_qualification_for_event = false:warning
+
+# Language keywords vs BCL types preferences.
+# ローカル変数、メソッドパラメータ、クラスメンバーに言語キーワードを使用する(◯int ×Int32).
+dotnet_style_predefined_type_for_locals_parameters_members = true:warning
+#メンバー アクセス式に言語キーワードを使用する.
+dotnet_style_predefined_type_for_member_access = true:warning
+
+# 括弧の規約.
+# 算術演算子の優先順位を明確にするために括弧を使用する(var v = a + (b * C);).
+dotnet_style_parentheses_in_arithmetic_binary_operators = always_for_clarity:silent
+# 関係演算子の優先順位を明確にするために括弧を使用する(var v = (a < b) == (c > d);).
+dotnet_style_parentheses_in_relational_binary_operators = always_for_clarity:silent
+# その他の2項演算子の優先順位を明確にするために括弧を使用する(var v = a || (b $$ c);).
+dotnet_style_parentheses_in_other_binary_operators = always_for_clarity:silent
+# その他の演算子の優先順位が明確な場合は括弧を使用しない(var v = a.b.Length; not (a.b).Length)
+dotnet_style_parentheses_in_other_operators = never_if_unnecessary:silent
+
+# アクセシビリティ修飾子の規約.
+# パブリック、インターフェース、メンバーの場合を除き、アクセシビリティ修飾子を使用する(privateはつける必要あり).
+dotnet_style_require_accessibility_modifiers = for_non_interface_members:warning
+# インラインまたはコンストラクターでのみ割り当てられる場合、プライベートフィールドにreadonlyの記述が必要.
+dotnet_style_readonly_field = true:warning
+
+# 表記方法の規約.
+#可能であればオブジェクト初期化紙を使用し、オブジェクトを初期化する必要がある.
+dotnet_style_object_initializer = none
+dotnet_diagnostic.IDE0017.severity = none
+dotnet_diagnostic.IDE0090.severity = none
+#可能であればコレクション(List等)初期化紙を使用し、オブジェクトを初期化する必要がある.
+dotnet_style_collection_initializer = none
+# (string name, int age) customer = GetCustomer(); としたときvar name = customer.Item1で取得はだめ custormer.nameで取得すること.
+dotnet_style_explicit_tuple_names = true:warning
+# 可能であればnull条件演算子を使用すること.
+dotnet_style_null_propagation = true:warning
+# 三項演算子チェックではなくnull合体式を使用する(var v = x ?? y; という書き方).
+dotnet_style_coalesce_expression = true:warning
+# is_nullチェックを優先する. if (value is null) return;.
+dotnet_style_prefer_is_null_check_over_reference_equality_method = true:warning
+# 推論されたタプル要素名が優先される. (var tuple = (age, name));
+dotnet_style_prefer_inferred_tuple_names = true:warning
+# 推論された匿名型のメンバー名が優先される. (var anon = new { age, name };).
+dotnet_style_prefer_inferred_anonymous_type_member_names = true:warning
+# 自動実装プロパティを使用する( private int Age { get; }.).
+dotnet_style_prefer_auto_properties = false
+# 三項条件を使用する割り当てを優先する. sting s = expr ? "hello" : "world";.
+dotnet_style_prefer_conditional_expression_over_assignment = true:warning
+# 三項条件を使用する return ステートメントを優先する. retrun expr _ "hello" : "world";.
+dotnet_style_prefer_conditional_expression_over_return = true:warning
+
+# 命名規則
+# Style Definitions
+dotnet_naming_style.pascal_case_style.capitalization = pascal_case
+#中括弧は同じ行にする.
+csharp_new_line_before_open_brace = none
+# else表記の中画期も同じ行にする
+csharp_new_line_before_else = false
+# catchも
+sharp_new_line_before_catch = false
+# finallyも
+csharp_new_line_before_finally = false

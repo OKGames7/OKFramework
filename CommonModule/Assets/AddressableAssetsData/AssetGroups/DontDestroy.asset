@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: DontDestroy
+  m_EditorClassIdentifier: 
+  m_GroupName: DontDestroy
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 0f05014e27f2d432494c4c575b837d5d
+  m_SerializeEntries:
+  - m_GUID: 398bec806f0444579807f2ee64a5b916
+    m_Address: GlobalContext
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DontDestroy
+  - m_GUID: 2bb070285435e48319749e2fc331e968
+    m_Address: FadeCanvas
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DontDestroy/PrefabInPrefab
+  - m_GUID: 0c2b8b3beb7bc4bf19b10820993e08ad
+    m_Address: Fader
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DontDestroy
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: cc5c3834b33fa4d4c954d9267378af1f, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 401b77472811949fcaefe6985d7b5c0a, type: 2}
+    - {fileID: 11400000, guid: 4f3b4bcdaa7da4856a75339dffc351ae, type: 2}
