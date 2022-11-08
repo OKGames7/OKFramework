@@ -14,16 +14,16 @@ public interface IBuildSetting {
     /// <summary>
     /// BuildSettinsの設定.
     /// </summary>
-    void SetupBuildSettins(BuildTarget target);
+    void SetupBuildSettins(BuildTarget target, bool isUpStore);
 
     /// <summary>
     /// PlayerSettingsの設定.
     /// </summary>
-    void SetupPlayerSettins(BuildTarget target);
+    void SetupPlayerSettins(BuildTarget target, bool isUpStore);
 
     /// <summary>
     /// BuildSettigsとPlayerSettings以外の設定.
     /// </summary>
-    void SetupOtherSettins(BuildTarget target);
+    void SetupOtherSettins(BuildTarget target, bool isUpStore);
 
 }

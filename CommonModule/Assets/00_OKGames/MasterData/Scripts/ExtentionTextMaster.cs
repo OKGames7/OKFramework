@@ -1,7 +1,5 @@
 using OKGamesFramework;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using System.Linq;
 
 /// <summary>
 /// Textマスターの拡張クラス.
@@ -13,9 +11,9 @@ public static class ExtentionTextMaster {
     /// </summary>
     /// <param name="key">キー情報.</param>
     /// <param name="sheetIndex">excelの元データのシートページ. 1ページしかない想定.</param>
-    /// <returns></returns>
+    /// <returns>該当レコード.</returns>
     private static Entity_text.Param GetRecordByKey(Entity_text master, string key, int sheetIndex = 0) {
-        return master.sheets[sheetIndex].list.Find(data => (data.key == key));
+        return master.sheets[sheetIndex].list.FirstOrDefault(data => (data.key == key));
     }
 
     /// <summary>
@@ -26,7 +24,6 @@ public static class ExtentionTextMaster {
     /// <returns>テキスト.</returns>
     public static string GetText(this Entity_text master, string key, Language lang) {
         Entity_text.Param data = GetRecordByKey(master, key, 0);
-
         string str = "";
         switch (lang) {
             case Language.Ja:
@@ -36,7 +33,6 @@ public static class ExtentionTextMaster {
                 str = data.en;
                 break;
         }
-
         return str;
     }
 

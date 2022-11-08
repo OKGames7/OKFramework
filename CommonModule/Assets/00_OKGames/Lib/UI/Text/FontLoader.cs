@@ -2,6 +2,7 @@ using OKGamesLib;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UniRx;
 
 namespace OKGamesLib {
 
@@ -10,11 +11,19 @@ namespace OKGamesLib {
     /// </summary>
     public class FontLoader : IFontLoader {
 
+        private IReadOnlyReactiveProperty<UserData> _userData;
+        private IResourceStore _resourceStore;
+
+
+        public void Inject(IUITransfer transfer) {
+            _userData = transfer.UserData;
+            _resourceStore = transfer.ResourceStore;
+        }
+
         public async UniTask<TMP_FontAsset> GetFontByCurrentLang() {
             Language lang;
-            var userData = OKGamesFramework.OKGames.Context.UserDataStore.Data;
-            if (userData != null) {
-                lang = userData.Value.CurrentLanguage;
+            if (_userData != null) {
+                lang = _userData.Value.CurrentLanguage;
             } else {
                 // デフォルトは日本語とする.
                 lang = Language.Ja;
@@ -37,16 +46,14 @@ namespace OKGamesLib {
                     break;
             }
 
-            var store = OKGamesFramework.OKGames.Context.ResourceStore;
-
-            if (!store.Contains(str)) {
+            if (!_resourceStore.Contains(str)) {
                 // まだフォントアセットをAddressablesから取得していなかったらロード
                 string[] fontAddress = new string[1] { str };
-                await store.RetainGlobalWithAutoLoad(fontAddress);
+                await _resourceStore.RetainGlobalWithAutoLoad(fontAddress);
             }
 
             // フォントの取得.
-            var font = store.GetObj<TMP_FontAsset>(str);
+            var font = _resourceStore.GetObj<TMP_FontAsset>(str);
             return font;
         }
 

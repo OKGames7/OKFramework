@@ -6,14 +6,11 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/00_OKGames/Lib/SceneTransition/Test/TestScene/TestTransitionScene1.unity
-    guid: 6dcd062ef202a428d82d938b7f9bc169
+    path: Assets/00_OKGames/Test/TestBoot.unity
+    guid: a0c7184d993c647a98fccb78dc1dcdac
   - enabled: 1
-    path: Assets/00_OKGames/Lib/SceneTransition/Test/TestScene/TestTransitionScene2.unity
-    guid: 47f88d89a1b3c41339001b65c8ee9546
-  - enabled: 1
-    path: Assets/00_OKGames/Lib/Save/Test/TestScene/TestSaveScene.unity
-    guid: 98cfcee62d33441b28d348f5f0111dbd
+    path: Assets/00_OKGames/Test/TestIAP/Scene/TestIAP.unity
+    guid: ad9a3be94d1484da3bf1359674ea82ed
   - enabled: 1
     path: Assets/01_PJ/Scenes/TitleScene.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab

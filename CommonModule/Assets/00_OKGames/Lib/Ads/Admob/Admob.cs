@@ -7,11 +7,22 @@ namespace OKGamesLib {
     /// <summary>
     /// Admob広告機能へのアクセスクラス.
     /// </summary>
-    public class Admob {
+    public class Admob : IAdmob {
 
+        /// <summary>
+        /// バナー型の広告制御クラス.
+        /// </summary>
         private AdmobBanner _banner;
+
+        /// <summary>
+        /// インタースティシャル型の広告制御クラス.
+        /// </summary>
         private AdmobInterstitial _interstitial;
 
+        /// <summary>
+        /// <see cref="IAdmob.IsInit"/>
+        /// </summary>
+        public bool IsInit => _isInit;
         public bool _isInit = false;
 
         // OSのApp Tracking Transparencyの使用許可があるか
@@ -21,7 +32,7 @@ namespace OKGamesLib {
 
 
         /// <summary>
-        /// 初期化処理
+        /// <see cref="IAdmob.InitAsync"/>
         /// この関数内の処理順番は意図的に記述していっている部分が多いのでむやみに変えないこと.
         /// </summary>
         public async UniTask InitAsync() {
@@ -56,7 +67,7 @@ namespace OKGamesLib {
         }
 
         /// <summary>
-        /// バナーを表示する.
+        /// <see cref="IAdmob.ShowBanner"/>
         /// </summary>
         public void ShowBanner() {
             if (_isInit) {
@@ -67,7 +78,7 @@ namespace OKGamesLib {
         }
 
         /// <summary>
-        /// バナーを非表示にする.
+        /// <see cref="IAdmob.HideBanner"/>
         /// </summary>
         public void HideBanner() {
             if (_isInit) {
@@ -78,7 +89,7 @@ namespace OKGamesLib {
         }
 
         /// <summary>
-        /// インタースティシャル広告をを表示する.
+        /// <see cref="IAdmob.ShowInterstitial"/>
         /// 本広告は閉じた時の処理に破棄処理がされる作りになっていて非表示は外部公開していない.)
         /// </summary>
         public void ShowInterstitial() {

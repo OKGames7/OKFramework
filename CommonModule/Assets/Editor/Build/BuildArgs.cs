@@ -22,10 +22,13 @@ public class BuildArgs {
     // keystoreのパスはEditorで設定しても保持されないため変数に格納.
     public static string KeyAliasName { get; private set; }
     public static string KeyStorePass { get; private set; }
-    public static string KeyAliapPass { get; private set; }
+    public static string KeyAliasPass { get; private set; }
 
     // 開発用ビルドか.
     public static bool IsDevelopment { get; private set; }
+
+    // プラットフォームストアにUpする用か.
+    public static bool IsUploadStore { get; private set; }
 
     /// <summary>
     /// コマンドラインから引数に渡した情報をメンバ変数へ格納する.
@@ -43,6 +46,10 @@ public class BuildArgs {
                 case "-development":
                     IsDevelopment = true;
                     setVariabeList.Add("IsDevelopment :" + IsDevelopment.ToString());
+                    break;
+                case "-uploadStore":
+                    IsUploadStore = System.Convert.ToBoolean(args[i + 1]);
+                    setVariabeList.Add("IsUploadStore :" + IsUploadStore.ToString());
                     break;
                 case "-appVersionCode":
                     AppVersionCode = args[i + 1];
@@ -73,8 +80,8 @@ public class BuildArgs {
                     setVariabeList.Add("KeyAliasName: " + KeyAliasName);
                     break;
                 case "-keyAliasPass":
-                    KeyAliapPass = args[i + 1];
-                    setVariabeList.Add("KeyAliapPass: " + KeyAliapPass);
+                    KeyAliasPass = args[i + 1];
+                    setVariabeList.Add("KeyAliapPass: " + KeyAliasPass);
                     break;
                 default:
                     break;
@@ -87,19 +94,22 @@ public class BuildArgs {
     /// コマンドラインから引数に渡すべき情報が入っているかを確認する.
     /// </summary>
     public static bool Validation(BuildTarget target) {
-        bool isOK = true;
-        isOK = BuildArgs.ExportAppPath != "";
-        isOK = BuildArgs.BuildVersion != "";
-        isOK = BuildArgs.AppVersionCode != "";
-
+        bool isOK;
         if (target == BuildTarget.Android) {
-            isOK = BuildArgs.AndroidVersionCode != "";
-            // isOK = keyStorePath != "";
-            // isOK = keyStorePass != "";
-            // isOK = keyAliasName != "";
-            // isOK = keyAliapPass != "";
+            isOK = BuildArgs.ExportAppPath != ""
+                && BuildArgs.BuildVersion != ""
+                && BuildArgs.AppVersionCode != ""
+                && BuildArgs.AndroidVersionCode != ""
+                && BuildArgs.KeyStorePath != ""
+                && BuildArgs.KeyStorePass != ""
+                && BuildArgs.KeyAliasName != ""
+                && BuildArgs.KeyAliasPass != "";
         } else {
-            isOK = BuildArgs.IOSVersionCode != "";
+            isOK = BuildArgs.ExportAppPath != ""
+                && BuildArgs.BuildVersion != ""
+                && BuildArgs.AppVersionCode != ""
+                && BuildArgs.AndroidVersionCode != ""
+                && BuildArgs.IOSVersionCode != ""; ;
         }
 
         return isOK;

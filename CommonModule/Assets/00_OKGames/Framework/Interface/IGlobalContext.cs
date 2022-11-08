@@ -1,5 +1,6 @@
 using OKGamesLib;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 namespace OKGamesFramework {
 
@@ -27,6 +28,8 @@ namespace OKGamesFramework {
         ITweenerHub TweenerHub { get; }
 
         IObjectPoolHub ObjectPoolHub { get; }
+
+        GameObject ContextGameObject { get; }
 
         /// <summary>
         /// 非同期で済む部分の初期化処理.

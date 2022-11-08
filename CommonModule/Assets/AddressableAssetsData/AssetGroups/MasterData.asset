@@ -22,8 +22,13 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - MasterData
-  - m_GUID: 90ca086f0247345a78f7d11e7628c2bd
+  - m_GUID: 34e347880a2504c18880a11feee68351
     m_Address: texts
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - MasterData
+  - m_GUID: 5e392cc24c6b44f0d81b9df1574d9a9a
+    m_Address: platform_items
     m_ReadOnly: 0
     m_SerializedLabels:
     - MasterData

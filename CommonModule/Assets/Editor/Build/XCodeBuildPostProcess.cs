@@ -30,16 +30,11 @@ public class XCodeBuildPostProcess {
         PBXProject pbxProject = new PBXProject();
 
         pbxProject.ReadFromString(File.ReadAllText(projectPath));
-        // string targetGuid = pbxProject.GetUnityFrameworkTargetGuid();
+        string targetGuid = pbxProject.GetUnityFrameworkTargetGuid();
 
         // OtherLinker追加
         // 必要あれば↓のように記載.
         // pbxProject.AddBuildProperty(targetGuid, "OTHER_LDFLAGS", "追加したいLinker名");
-
-        // Framework追加 第三引数は Requiredならtrue,Optionalならfalse
-        // 必要あれば↓のように記載.
-        // pbxProject.AddCapability(targetGuid, PBXCapabilityType.InAppPurchase); アプリ内課金
-        // 他CRIや、SmartBeat, Firebase, Adjust等のプラグインを使う場合はフレームワーク追加が必要.
 
         // plistに情報追加.
         var plist = new PlistDocument();
@@ -49,6 +44,9 @@ public class XCodeBuildPostProcess {
         plist.root.SetString("CFBundleDevelopmentRegion", "ja");
         var localizationsArray = plist.root.CreateArray("CFBundleLocalizations");
         localizationsArray.AddString("ja");
+
+        // アプリ内課金の有効設定.
+        pbxProject.AddCapability(targetGuid, PBXCapabilityType.InAppPurchase);
 
         // Admob使用のために必要.
         // これらを追加しないとAdmob関連起動時やOSでATT利用承認ダイアログを出す際などにクラッシュする.

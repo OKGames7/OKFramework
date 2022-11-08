@@ -5,10 +5,12 @@ namespace OKGamesLib
 {
     public static class SceneName {
       public enum SceneNameEnum {
-        TestTransitionScene1 = 0,
-        TestTransitionScene2 = 1,
-        TestSaveScene        = 2,
-        TitleScene           = 3,
+        TestBoot             = 0,
+        TestIAP              = 1,
+        TestTransitionScene1 = 2,
+        TestTransitionScene2 = 3,
+        TestSaveScene        = 4,
+        TitleScene           = 5,
       }
     }
 }

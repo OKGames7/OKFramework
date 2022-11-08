@@ -42,7 +42,14 @@ namespace OKGamesFramework {
         /// <param name="bootConfig">起動時設定処理を持つクラス.</param>
         /// <param name="resourceStore">AddressablesのリソースStore</param>
         /// <param name="fadeScreenRootObject">フェード管理するオブジェクトのrootオブジェクト</param>
+        /// <returns>UniTask</returns>
         void Init(IBootConfig bootConfig, IResourceStore resourceStore, GameObject fadeScreenRootObject);
+
+        /// <summary>
+        /// 起動直後のシーン初期化.
+        /// </summary>
+        /// <returns>UniTask.</returns>
+        UniTask InitSceneAsync();
 
         /// <summary>
         /// 次シーンへ遷移する。

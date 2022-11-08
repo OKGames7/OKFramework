@@ -1,6 +1,7 @@
 using OKGamesFramework;
 using Cysharp.Threading.Tasks;
 using UniRx;
+using UniRx.Triggers;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,23 +24,29 @@ namespace OKGamesLib {
         /// </summary>
         [SerializeField] private Type _type;
 
+        private IAudioPlayer _sePlaer;
+        private IResourceStore _resourceStore;
+
         /// <summary>
         /// 初期化.
         /// </summary>
         /// <param name="button">紐付けするボタン.</param>
         /// <returns>UniTask,</returns>
-        public async UniTask Init(Button button) {
+        public async UniTask Init(Button button, IAudioPlayer sePlayer, IResourceStore store) {
             // サウンドデータのロード.
-            var store = OKGames.Context.ResourceStore;
+            _sePlaer = sePlayer;
+            _resourceStore = store;
+
             string address = _type == Type.OK ? AssetAddress.AssetAddressEnum.common_ok.ToString() : AssetAddress.AssetAddressEnum.common_ng.ToString();
-            if (!store.Contains(address)) {
+            if (!_resourceStore.Contains(address)) {
                 // まだTextマスターを取得していなかったらAddressablesから取得.
                 string[] addresses = new string[1] { address };
-                await store.RetainGlobalWithAutoLoad(addresses);
+                await _resourceStore.RetainGlobalWithAutoLoad(addresses);
             }
 
             // クリック時にSE再生するようにバインド.
-            button.OnClickAsObservable()
+            button.OnPointerDownAsObservable()
+                .Where(_ => button.interactable)
                 .Subscribe(_ => PlaySE(address))
                 .AddTo(button);
         }
@@ -50,11 +57,10 @@ namespace OKGamesLib {
         /// <param name="address">再生するSEのAudioClipのAddressablesのアドレス.</param>
         private void PlaySE(string address) {
             // 再生するSEの取得.
-            var store = OKGames.Context.ResourceStore;
-            AudioClip clip = store.GetAudio(address);
+            AudioClip clip = _resourceStore.GetAudio(address);
 
             // SEの再生.
-            OKGames.Context.SePlayer.Play(clip);
+            _sePlaer.Play(clip);
         }
     }
 }

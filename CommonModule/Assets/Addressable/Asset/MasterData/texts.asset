@@ -15,6 +15,30 @@ MonoBehaviour:
   sheets:
   - name: text
     list:
+    - ID: 90001
+      key: PLATFORM_ITEM1_TEST_TITLE
+      ja: "\u8AB2\u91D1\u30C6\u30B9\u30C8\u30A2\u30A4\u30C6\u30E01\u306E\u30BF\u30A4\u30C8\u30EB"
+      en: "IAP test item1\u2019s title"
+    - ID: 90002
+      key: PLATFORM_ITEM2_TEST_TITLE
+      ja: "\u8AB2\u91D1\u30C6\u30B9\u30C8\u30A2\u30A4\u30C6\u30E02\u306E\u30BF\u30A4\u30C8\u30EB"
+      en: "IAP test item2\u2019s title"
+    - ID: 90003
+      key: PLATFORM_ITEM3_TEST_TITLE
+      ja: "\u8AB2\u91D1\u30C6\u30B9\u30C8\u30A2\u30A4\u30C6\u30E03\u306E\u30BF\u30A4\u30C8\u30EB"
+      en: "IAP test item3\u2019s title"
+    - ID: 90004
+      key: PLATFORM_ITEM1_TEST_DESCRIPTION
+      ja: "\u8AB2\u91D1\u30C6\u30B9\u30C8\u30A2\u30A4\u30C6\u30E01\u306E\u8AAC\u660E"
+      en: "IAP test item1\u2019s desciption"
+    - ID: 90005
+      key: PLATFORM_ITEM2_TEST_DESCRIPTION
+      ja: "\u8AB2\u91D1\u30C6\u30B9\u30C8\u30A2\u30A4\u30C6\u30E02\u306E\u8AAC\u660E"
+      en: "IAP test item2\u2019s desciption"
+    - ID: 90006
+      key: PLATFORM_ITEM3_TEST_DESCRIPTION
+      ja: "\u8AB2\u91D1\u30C6\u30B9\u30C8\u30A2\u30A4\u30C6\u30E03\u306E\u8AAC\u660E"
+      en: "IAP test item3\u2019s desciption"
     - ID: 99993
       key: TEST1
       ja: A JA

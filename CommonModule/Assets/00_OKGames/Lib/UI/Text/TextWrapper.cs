@@ -1,6 +1,8 @@
 using OKGamesFramework;
 using TMPro;
+using System.Threading;
 using Cysharp.Threading.Tasks;
+using System;
 using UnityEngine;
 
 namespace OKGamesLib {
@@ -23,60 +25,55 @@ namespace OKGamesLib {
 
         private Language _lang = Language.Ja;
 
+        private IFontLoader _loader;
+        private Entity_text _textMaster;
+
+        /// <summary>
+        /// UniTaksの中断用.
+        /// </summary>
+        public CancellationTokenSource CancelTokenSource => _cancelTokenSource;
+        private readonly CancellationTokenSource _cancelTokenSource = new CancellationTokenSource();
+
+        private bool _isSetup = false;
 
         /// <summary>
         /// 初期化処理
         /// </summary>
-        private void Start() {
-            // Inspectorビューで設定されている内容を基にテキストを表示する.
-            Display().Forget();
-        }
-
-        /// <summary>
-        /// 現在のメンバ変数の情報を基にテキストを表示する.
-        /// 外部クラスからテキスト表示するための唯一のアクセスポイント.
-        /// </summary>
-        [ContextMenu("Display")]
-        public async UniTask Display() {
-
-            // メンバ変数の内容を基にTextMeshProコンポーネントへ設定する.
-            await Setup();
-
-            // マスターからテキストデータを取得しUIへ表示.
-            var store = OKGames.Context.ResourceStore;
-            string address = AssetAddress.AssetAddressEnum.texts.ToString();
-            if (!store.Contains(address)) {
-                // まだTextマスターを取得していなかったらAddressablesから取得.
-                string[] textAddress = new string[1] { address };
-                await store.RetainGlobalWithAutoLoad(textAddress);
-            }
+        private async void Start() {
+            // アダプター側でウォッチャーへ登録し、本コンポーネントの設定を行う.
+            var adapter = OKGames.Context.UI.TextAdapter;
+            await adapter.Setup(this);
 
             if (!string.IsNullOrEmpty(_key)) {
-                var str = store.GetObj<Entity_text>(address).GetText(_key, _lang);
-                _text.text = str;
+                // テキストの表示.
+                ShowByKey();
             }
         }
 
         /// <summary>
-        /// TextMeshProのコンポーネントへ各種設定を行う.
+        /// 依存性の注入.
         /// </summary>
-        private async UniTask Setup() {
+        /// <param name="loader">フォント関連を取得するローダー.</param>
+        /// <param name="textMaster">テキストマスター.</param>
+        public void Inject(IFontLoader loader, Entity_text textMaster) {
+            _loader = loader;
+            _textMaster = textMaster;
+        }
 
-            // 本当はフレームワークの参照はここからはさせたくない..。
-            var userData = OKGames.Context.UserDataStore.Data.Value;
-            _lang = userData.CurrentLanguage;
-
-            var fontLoader = OKGames.Context.UI.FontLoader;
-
+        /// <summary>
+        /// 現在の変数情報からTextMeshProのコンポーネントへ各種設定を行う.
+        /// </summary>
+        public async UniTask Setup() {
             // フォント設定.
-            TMP_FontAsset font = await fontLoader.GetFont(_lang);
+            TMP_FontAsset font = await _loader.GetFont(_lang);
+            // _text.font = font;
             _text.font = font;
 
             // スタイル設定.
             _text.fontStyle = _stryle;
 
             // サイズ設定.
-            int fontSize = fontLoader.GetFontSize(_lang, _theme);
+            int fontSize = _loader.GetFontSize(_lang, _theme);
             _text.fontSize = fontSize + _sizeOffset;
 
             // オートサイズは処理が重いのと、決めのサイズ指定ができなくなるので使わない.
@@ -90,14 +87,55 @@ namespace OKGamesLib {
             _text.alignment = _alignment;
 
             // カラー設定.
-            Color color = fontLoader.GetFontColor(_colorType);
+            Color color = _loader.GetFontColor(_colorType);
             _text.color = color;
 
             // タグを使用できるようにON.
             _text.richText = true;
 
             // 文字だけにヒット判定する必要はないのでOFF.
-            _text.raycastTarget = false;
+            if (_text.raycastTarget) {
+                _text.raycastTarget = false;
+            }
+
+            _isSetup = true;
+        }
+
+
+        /// <summary>
+        /// テキストを表示する.
+        /// </summary>
+        /// <param name="text">表示するテキスト.</param>
+        public void Show(string text) {
+            _text.text = text;
+        }
+
+        /// <summary>
+        /// テキストマスターのキーを基にテキスト表示する.
+        /// </summary>
+        /// <param name="key"></param>
+        public void ShowByKey(string key = null) {
+            ShowByKeyAsync(key).Forget();
+        }
+
+        private async UniTask ShowByKeyAsync(string key = null) {
+            await UniTask.WaitUntil(() => _isSetup);
+
+            if (!string.IsNullOrEmpty(key)) {
+                _key = key;
+            }
+
+            if (!string.IsNullOrEmpty(_key)) {
+                var str = _textMaster.GetText(_key, _lang);
+                _text.text = str;
+            }
+        }
+
+        /// <summary>
+        /// TextマスターのIDを取得する.
+        /// </summary>
+        public string GetTextID() {
+            return _key;
         }
 
         /// <summary>
@@ -130,6 +168,26 @@ namespace OKGamesLib {
         /// <param name="alignment">整列情報.</param>
         public void SetAlignment(TextAlignmentOptions alignment) {
             _alignment = alignment;
+        }
+
+        /// <summary>
+        /// テキスト言語をセットする.
+        /// </summary>
+        /// <param name="lang">言語.</param>
+        public void SetLanguage(Language lang) {
+            _lang = lang;
+        }
+
+        /// <summary>
+        /// 破棄時に行う処理.
+        /// </summary>
+        private void OnDestroy() {
+            _cancelTokenSource.Cancel();
+
+            var adapter = OKGames.Context.UI.TextAdapter;
+            adapter.Remove(this);
+
+            _text = null;
         }
     }
 }

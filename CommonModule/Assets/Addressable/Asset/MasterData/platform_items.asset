@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 8
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb1469f8c08ab4f7091a27fcc00700bf, type: 3}
+  m_Name: platform_items
+  m_EditorClassIdentifier: 
+  sheets:
+  - name: platform_item
+    list:
+    - ID: 101
+      productID: test_item1_apple
+      productType: nonconsumable
+      platform: apple
+      titleKey: PLATFORM_ITEM1_TEST_TITLE
+      discriptionKey: PLATFORM_ITEM1_TEST_DESCRIPTION
+    - ID: 102
+      productID: test_item2_apple
+      productType: nonconsumable
+      platform: apple
+      titleKey: PLATFORM_ITEM2_TEST_TITLE
+      discriptionKey: PLATFORM_ITEM2_TEST_DESCRIPTION
+    - ID: 103
+      productID: test_item3_apple
+      productType: nonconsumable
+      platform: apple
+      titleKey: PLATFORM_ITEM3_TEST_TITLE
+      discriptionKey: PLATFORM_ITEM3_TEST_DESCRIPTION
+    - ID: 201
+      productID: test_item1_android
+      productType: nonconsumable
+      platform: android
+      titleKey: PLATFORM_ITEM1_TEST_TITLE
+      discriptionKey: PLATFORM_ITEM1_TEST_DESCRIPTION
+    - ID: 202
+      productID: test_item2_android
+      productType: nonconsumable
+      platform: android
+      titleKey: PLATFORM_ITEM2_TEST_TITLE
+      discriptionKey: PLATFORM_ITEM2_TEST_DESCRIPTION
+    - ID: 203
+      productID: test_item3_android
+      productType: nonconsumable
+      platform: android
+      titleKey: PLATFORM_ITEM3_TEST_TITLE
+      discriptionKey: PLATFORM_ITEM3_TEST_DESCRIPTION

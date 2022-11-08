@@ -29,7 +29,7 @@ namespace OKGamesFramework {
 
         public IObjectPoolHub ObjectPoolHub { get; private set; }
 
-
+        public GameObject ContextGameObject => _contextGameObj;
         private GameObject _contextGameObj;
         private GameObject _audioSourceGameObj;
 
@@ -48,23 +48,31 @@ namespace OKGamesFramework {
             UserDataStore = new UserDataStore();
             UserDataStore.Load();
 
-            SceneDirector = _contextGameObj.AddComponent<SceneDirector>();
-            SceneDirector.SceneUpdate += OnSceneUpdate;
-
             UI = new UI();
             UI.Init();
+
+#if DEVELOPMENT
+            SceneDirector = _contextGameObj.AddComponent<DebugSceneDirector>();
+#else
+            SceneDirector = _contextGameObj.AddComponent<SceneDirector>();
+#endif
+
+            SceneDirector.SceneUpdate += OnSceneUpdate;
 
             TimeKeeper = new TimeKeeper(SceneDirector);
 
             BgmPlayer = new BgmPlayer();
             SePlayer = new SePlayer();
 
-
             SignalHub = new SignalHub(SceneDirector);
 
             TweenerHub = new TweenerHub(SceneDirector, TimeKeeper);
 
             ObjectPoolHub = new ObjectPoolHub(SceneDirector);
+
+            // Camera FlagがDepth Onlyだけのカメラだと描画箇所以外の更新がされない.
+            // シーン遷移時など画面の描画を更新するためのカメラ.
+            CreateInitCamera();
 
             Log.Notice("[GlobalContext] - Init End");
         }
@@ -76,30 +84,67 @@ namespace OKGamesFramework {
                 bootConfig = new DefaultBootConfig();
             }
 
+            // マスターの読み込み.
+            string[] masterAddresses = new string[2] {
+                 AssetAddress.AssetAddressEnum.texts.ToString(),
+                 AssetAddress.AssetAddressEnum.platform_items.ToString()
+            };
+            var masterLoadAsync = ResourceStore.RetainGlobalWithAutoLoad(masterAddresses);
+
             // フェード管理オブジェクトを生成する.
             string str = AssetAddress.AssetAddressEnum.Fader.ToString();
             string[] addresses = new string[1] { str };
-            await ResourceStore.RetainGlobalWithAutoLoad(addresses);
+            var fadeLoadAsync = ResourceStore.RetainGlobalWithAutoLoad(addresses);
+
+            // Addressablesのロード待ち.
+            await UniTask.WhenAll(masterLoadAsync, fadeLoadAsync);
+
+            // フェードオブジェクトの生成.
             var fadeScreenObject = ResourceStore.GetGameObj(str);
             fadeScreenObject = GameObject.Instantiate(fadeScreenObject);
             GameObject.DontDestroyOnLoad(fadeScreenObject);
 
-            // シーンディレクターの初期化.
-            SceneDirector.Init(bootConfig, ResourceStore, fadeScreenObject);
-
             // サウンド管理系の初期化.
             BgmPlayer.Init(_audioSourceGameObj, bootConfig.numBgmSourcePool, SceneDirector, ResourceStore);
             SePlayer.Init(_audioSourceGameObj, bootConfig.numSeSourcePool, SceneDirector, ResourceStore);
+
+            // UI全般制御クラスの依存性注入.
+            var userdata = UserDataStore.Data;
+            var lang = userdata.Value != null ? userdata.Value.CurrentLanguage : Language.Ja;
+            var textMaster = ResourceStore.GetObj<Entity_text>(AssetAddress.AssetAddressEnum.texts.ToString());
+            var uiTransfer = new UITransfer(userdata, ResourceStore, lang, textMaster, SePlayer);
+            UI.Inject(uiTransfer);
+
+            // boot設定に記述している内容で設定初期化する.
+            bootConfig.OnGameBoot();
+
+            // シーンディレクターの初期化.
+            SceneDirector.Init(bootConfig, ResourceStore, fadeScreenObject);
 
             if (bootConfig.useGlobalAudioListener) {
                 // 立体サウンド用のListerをAdd.
                 _contextGameObj.AddComponent<AudioListener>();
             }
 
-            // boot設定に記述している内容で設定初期化する.
-            bootConfig.OnGameBoot();
-
             Log.Notice("[GlobalContext] - InitAsync End");
+        }
+
+        /// <summary>
+        /// シーン遷移時など画面全体の描画を更新するためのカメラ.
+        /// </summary>
+        private void CreateInitCamera() {
+            // オブジェクト生成.
+            GameObject initCamera = new GameObject("InitCamera");
+
+            // コンポーネントの生成.
+            Camera camera = initCamera.AddComponent<Camera>();
+
+            // 必要な設定.
+            camera.clearFlags = CameraClearFlags.SolidColor;
+            camera.backgroundColor = Color.black;
+            camera.depth = -1; // 一番最後に描画されるようにしている.
+            camera.cullingMask = 0; // Nothing.
+            GameObject.DontDestroyOnLoad(initCamera);
         }
 
         /// <summary>

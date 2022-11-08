@@ -39,6 +39,9 @@ public class BuildCommandLine {
         string[] args = System.Environment.GetCommandLineArgs();
         BuildArgs.SetArgs(args);
 
+        // プラットフォーム設定をスイッチする.
+        EditorUserBuildSettings.SwitchActiveBuildTarget(group, target);
+
         // ビルドに含めるシーンを取得する.
         _scenePaths = GetScenes();
         Log.Notice("格納されたシーン: " + string.Join("\n\t", _scenePaths));
@@ -50,18 +53,15 @@ public class BuildCommandLine {
 
         // ビルドに必要なパラメータ設定をするSetterクラスを生成.
         IBuildSetting buildParameterSetter = BuildArgs.IsDevelopment ? new DevelopmentBuildSetting() : new ReleaseBuildSetting();
-
+        bool isUpStore = BuildArgs.IsUploadStore;
         // BuildSettingsの設定.
-        buildParameterSetter.SetupBuildSettins(target);
+        buildParameterSetter.SetupBuildSettins(target, isUpStore);
 
         // PlayerSettings関係の設定.
-        buildParameterSetter.SetupPlayerSettins(target);
+        buildParameterSetter.SetupPlayerSettins(target, isUpStore);
 
         // その他の設定.
-        buildParameterSetter.SetupOtherSettins(target);
-
-        // プラットフォーム設定をスイッチする.
-        EditorUserBuildSettings.SwitchActiveBuildTarget(group, target);
+        buildParameterSetter.SetupOtherSettins(target, isUpStore);
 
         // 現在設定しているプラットフォームでアセットバンドルのビルドを行う.
         AddressableAssetSettings.BuildPlayerContent();

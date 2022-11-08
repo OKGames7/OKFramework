@@ -2,6 +2,7 @@ using OKGamesLib;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UniRx;
 
 namespace OKGamesLib {
 
@@ -9,6 +10,12 @@ namespace OKGamesLib {
     /// フォント関連の読み込み処理を行うクラスのインターフェース.
     /// </summary>
     public interface IFontLoader {
+
+        /// <summary>
+        /// 依存性の注入.
+        /// </summary>
+        /// <param name="transfar">依存性注入するデータが入っているtransfer.</param>
+        void Inject(IUITransfer transfer);
 
         /// <summary>
         /// 現在設定している言語で使用するフォントアセットを取得する.

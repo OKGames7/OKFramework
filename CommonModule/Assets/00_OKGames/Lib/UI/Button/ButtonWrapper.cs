@@ -1,6 +1,7 @@
 using OKGamesFramework;
 using UnityEngine.UI;
 using UniRx;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -28,27 +29,30 @@ namespace OKGamesLib {
 
         [SerializeField] private ButtonSound _sound;
 
-
-        // ボタン内のテキスト.
-        public TextWrapper TextWrapper => _textWrapper;
-        [SerializeField] private TextWrapper _textWrapper;
-
+        /// <summary>
+        /// UniTaksの中断用.
+        /// </summary>
+        private readonly CancellationTokenSource _cancelTokenSource = new CancellationTokenSource();
 
         /// <summary>
         /// 初期化処理
-        /// watcherへのBind処理をPJ側のボタンイベントの紐付けよりも先のタイミングにし、
+        /// adapter経由でwatcherへのBind処理をPJ側のボタンイベントの紐付けよりも先のタイミングにし、
         /// ボタンイベント時の最初処理でボタンを押したら全ボタンを非アクティブにさせたいためAwake処理を使用している.
         /// </summary>
         private void Awake() {
+            _isRunningProcess.AddTo(this);
 
+            var adapter = OKGames.Context.UI.ButtonAdapter;
+            adapter.Setup(this).Forget();
+        }
+
+        public void Setup(IResourceStore store, IAudioPlayer sePlayer) {
             _animation.Init(_button);
 
             // サウンドは鳴らせる準備が終わるまで待たなくてもOKとするのでawaitしていない.
-            _sound.Init(_button).Forget();
-
-            var watcher = OKGames.Context.UI.ButtonWatcher;
-            watcher.Add(this);
-            watcher.Bind(this);
+            _sound.Init(_button, sePlayer, store)
+                .AttachExternalCancellation(_cancelTokenSource.Token)
+                .Forget();
         }
 
         /// <summary>
@@ -69,10 +73,15 @@ namespace OKGamesLib {
 
         /// <summary>
         /// 破棄時に行う処理.
-        // /// </summary>
-        // protected override void OnDestroy() {
+        /// </summary>
         private void OnDestroy() {
-            OKGames.Context.UI.ButtonWatcher.Remove(this);
+            _cancelTokenSource.Cancel();
+
+            OKGames.Context.UI.ButtonAdapter.Remove(this);
+
+            _animation = null;
+            _sound = null;
+            _button = null;
         }
     }
 }

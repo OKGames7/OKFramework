@@ -32,6 +32,15 @@ namespace OKGamesFramework {
             _resourceStore = resourceStore;
 
             _screenFader = fadeScreenRootObject.GetComponentInChildren<Fade>();
+            _screenFader.Init();
+        }
+
+        public async UniTask InitSceneAsync() {
+            // 開始シーンはタイトルとする.
+            // ISceneContext context = new TitleContext();
+            ISceneContext context = new OKGamesTest.TestBootContext();
+
+            await GoToNextScene(context);
         }
 
         /// <summary>
@@ -48,7 +57,7 @@ namespace OKGamesFramework {
 
         public async UniTask GoToNextScene(ISceneContext nextSceneContext, float fadeOutTime = 0.3f, float fadeInTime = 0.3f) {
             Log.Notice($"[SceneDirector] Load scene with scene context : <b>{nextSceneContext}</b>");
-            await LoadSceneWithFade(nextSceneContext, nextSceneContext.SceneName(), false, fadeOutTime, fadeInTime);
+            await LoadSceneWithFade(nextSceneContext, nextSceneContext.GetSceneName(), false, fadeOutTime, fadeInTime);
         }
 
         public async UniTask GoToNextScene(string nextSceneName, float fadeOutTime = 0.3f, float fadeInTime = 0.3f) {
@@ -58,7 +67,7 @@ namespace OKGamesFramework {
 
         public async UniTask GoToNextSceneWithCustomTransition(ISceneContext nextSceneContext) {
             Log.Notice($"[SceneDirector] Load scene with scene context : <b>{nextSceneContext}</b>");
-            await LoadSceneWithFade(nextSceneContext, nextSceneContext.SceneName(), true);
+            await LoadSceneWithFade(nextSceneContext, nextSceneContext.GetSceneName(), true);
         }
 
         public async UniTask GoToNextSceneWithCustomTransition(string nextSceneName) {
@@ -88,11 +97,11 @@ namespace OKGamesFramework {
             }
             IsInTransition = true;
 
-            // フェード処理
+            // フェードイン処理
             if (useCutomTransiton && CurrentSceneContext != null) {
-                await CurrentSceneContext.CustomFadeOut();
+                await CurrentSceneContext.CustomFadeIn();
             } else {
-                await _screenFader.FadeOut(fadeOutTime);
+                await _screenFader.FadeIn(fadeInTime);
             }
 
             SceneLoading?.Invoke();
@@ -130,10 +139,10 @@ namespace OKGamesFramework {
 
             SceneLoaded?.Invoke();
 
-            // シーンの1フレーム目は重くなりやすいので、1フレ待ってからフェードインする.
+            // シーンの1フレーム目はその時のCPU負荷によって重くなることがあるので、1フレ待機してからフェードアウトする.
             await UniTask.DelayFrame(1);
             if (useCutomTransiton && CurrentSceneContext != null) {
-                await CurrentSceneContext.CustomFadeIn();
+                await CurrentSceneContext.CustomFadeOut();
             } else {
                 await _screenFader.FadeOut(fadeOutTime);
             }
@@ -194,9 +203,5 @@ namespace OKGamesFramework {
                 audioListener.enabled = false;
             }
         }
-
-
     }
-
-
 }
