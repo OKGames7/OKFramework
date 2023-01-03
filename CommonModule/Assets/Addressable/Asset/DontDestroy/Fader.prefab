@@ -61,7 +61,7 @@ Camera:
   field of view: 60
   orthographic: 1
   orthographic size: 5
-  m_Depth: 220
+  m_Depth: 420
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 258
@@ -88,7 +88,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: caa32c9a7ed47476eadf4d56846c4407, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _layer: 5
+  _layer: 7
   _depth: 20
   _offsetDepth: 0
   _camera: {fileID: 6323614286153474048}
@@ -150,7 +150,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22333946, guid: 2bb070285435e48319749e2fc331e968, type: 3}
       propertyPath: m_SortingLayerID
-      value: -1885971385
+      value: 130677483
       objectReference: {fileID: 0}
     - target: {fileID: 22424616, guid: 2bb070285435e48319749e2fc331e968, type: 3}
       propertyPath: m_Pivot.x
@@ -238,11 +238,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6367893402036361147, guid: 2bb070285435e48319749e2fc331e968, type: 3}
       propertyPath: m_ScreenMatchMode
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7518974581454586173, guid: 2bb070285435e48319749e2fc331e968, type: 3}
       propertyPath: _type
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7518974581454586173, guid: 2bb070285435e48319749e2fc331e968, type: 3}
       propertyPath: _sortingOrder

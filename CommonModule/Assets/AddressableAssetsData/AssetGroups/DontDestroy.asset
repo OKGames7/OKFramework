@@ -17,11 +17,6 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 0f05014e27f2d432494c4c575b837d5d
   m_SerializeEntries:
-  - m_GUID: 398bec806f0444579807f2ee64a5b916
-    m_Address: GlobalContext
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - DontDestroy
   - m_GUID: 2bb070285435e48319749e2fc331e968
     m_Address: FadeCanvas
     m_ReadOnly: 0
@@ -29,6 +24,36 @@ MonoBehaviour:
     - DontDestroy/PrefabInPrefab
   - m_GUID: 0c2b8b3beb7bc4bf19b10820993e08ad
     m_Address: Fader
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DontDestroy
+  - m_GUID: 089f28b8e6c2f4527b913267e252fa8a
+    m_Address: PopNotify
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DontDestroy
+  - m_GUID: 54873f7e343db44c18e0f99001f57104
+    m_Address: CommonDialog
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DontDestroy
+  - m_GUID: fcf7e4c8d520049208f4a52fa70f1183
+    m_Address: CommonDialogView
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DontDestroy
+  - m_GUID: 84e3eed9dec024d2abd2992debb8bc10
+    m_Address: SystemDialogView
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DontDestroy
+  - m_GUID: 16824fcd274fc4870b193bf0c682b673
+    m_Address: SystemDialog
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DontDestroy
+  - m_GUID: 5607c502f7f2745bbaf1758a3e71bfb0
+    m_Address: CustomeDialog
     m_ReadOnly: 0
     m_SerializedLabels:
     - DontDestroy

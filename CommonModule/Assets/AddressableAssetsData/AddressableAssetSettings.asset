@@ -102,6 +102,7 @@ MonoBehaviour:
     - MasterData
     - Font
     - Sound/SE
+    - Sound/BGM
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 00ce97b1e4c3943468c2119ceaad11b3, type: 2}
