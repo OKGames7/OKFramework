@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using UnityEngine;
+using UnityEditor.UI;
 using UnityEditor;
 
 namespace OKGamesLib {
@@ -12,9 +13,29 @@ namespace OKGamesLib {
 
         // アセットパス変数.
         private static readonly string _commonFormat = "Assets/00_OKGames/Lib/Prefabs/{0}";
+
+
         private static readonly string _textObjectPath = string.Format(_commonFormat, "CustomeText.prefab");
         private static readonly string _buttonObjectPath = string.Format(_commonFormat, "CustomeButton.prefab");
 
+
+        /// <summary>
+        /// LoopHorizontalScrollRectオブジェクトの生成.
+        /// priorityは高くして項目の一番下にでるようにしている.
+        /// </summary>
+        [MenuItem("GameObject/OKGames/LoopHorizontalScrollRect", priority = 999)]
+        private static void CreateLoopHorizontalScrollRect(MenuCommand menuCommand) {
+            SGMenuOptions.AddLoopHorizontalScrollRect(menuCommand);
+        }
+
+        /// <summary>
+        /// LoopVerticalScrollRectオブジェクトの生成.
+        /// priorityは高くして項目の一番下にでるようにしている.
+        /// </summary>
+        [MenuItem("GameObject/OKGames/LoopVerticleScrollRect", priority = 999)]
+        private static void CreateLoopVerticalScrollRect(MenuCommand menuCommand) {
+            SGMenuOptions.AddLoopVerticalScrollRect(menuCommand);
+        }
 
         /// <summary>
         /// CustomeTextオブジェクトの生成.
