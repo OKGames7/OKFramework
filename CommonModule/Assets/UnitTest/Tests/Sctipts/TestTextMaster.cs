@@ -29,19 +29,19 @@ namespace UnitTest {
             // nullチェック.
             Assert.That(textMaster != null);
 
-            string jaText = textMaster.GetText("TEST1");
-            string enText = textMaster.GetText("TEST1", Language.En);
+            string jaText = textMaster.GetText("DIALOG_OK");
+            string enText = textMaster.GetText("DIALOG_OK", Language.En);
 
             // テキストを言語ごとで取得できるかチェック.
-            Assert.That(jaText == "A JA");
-            Assert.That(enText == "A EN");
+            Assert.That(jaText == "決定");
+            Assert.That(enText == "OK");
 
-            jaText = textMaster.GetText("TEST6");
-            enText = textMaster.GetText("TEST6", Language.En);
+            jaText = textMaster.GetText("DIALOG_NO");
+            enText = textMaster.GetText("DIALOG_NO", Language.En);
 
             // 先頭以外の要素も取得できるかチェック.
-            Assert.That(jaText == "FFFFFF JA");
-            Assert.That(enText == "FFFFFF EN");
+            Assert.That(jaText == "キャンセル");
+            Assert.That(enText == "NO");
         });
     }
 }
