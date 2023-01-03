@@ -27,8 +27,15 @@ public class BuildArgs {
     // 開発用ビルドか.
     public static bool IsDevelopment { get; private set; }
 
+    // FPSとメモリ量のデバッグ表示するか
+    public static bool IsDebugSimpleProfileUI { get; private set; }
+
+    // CommonModuleの機能をデバッグするシーンから始めるか
+    public static bool IsStartCommonModuleDebugScene { get; private set; }
+
     // プラットフォームストアにUpする用か.
     public static bool IsUploadStore { get; private set; }
+
 
     /// <summary>
     /// コマンドラインから引数に渡した情報をメンバ変数へ格納する.
@@ -46,6 +53,14 @@ public class BuildArgs {
                 case "-development":
                     IsDevelopment = true;
                     setVariabeList.Add("IsDevelopment :" + IsDevelopment.ToString());
+                    break;
+                case "-debugSimpleProfileUI":
+                    IsDebugSimpleProfileUI = System.Convert.ToBoolean(args[i + 1]);
+                    setVariabeList.Add("IsDebugSimpleProfiler :" + IsDebugSimpleProfileUI.ToString());
+                    break;
+                case "-debugCommonModule":
+                    IsStartCommonModuleDebugScene = System.Convert.ToBoolean(args[i + 1]);
+                    setVariabeList.Add("IsDebugSimpleProfiler :" + IsStartCommonModuleDebugScene.ToString());
                     break;
                 case "-uploadStore":
                     IsUploadStore = System.Convert.ToBoolean(args[i + 1]);

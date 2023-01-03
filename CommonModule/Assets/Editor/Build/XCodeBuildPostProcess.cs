@@ -10,6 +10,22 @@ using UnityEditor.iOS.Xcode;
 // ---------------------------------------------------------
 public class XCodeBuildPostProcess {
 
+    [PostProcessBuildAttribute(45)]//must be between 40 and 50 to ensure that it's not overriden by Podfile generation (40) and that it's added before "pod install" (50)
+    private static void PostProcessBuildiOS(BuildTarget target, string buildPath) {
+        if (target == BuildTarget.iOS) {
+
+            using (StreamWriter sw = File.AppendText(buildPath + "/Podfile")) {
+                //in this example I'm adding an app extension
+                sw.WriteLine("post_install do |installer|");
+                sw.WriteLine("installer.pods_project.build_configurations.each do |config|");
+                sw.WriteLine("config.build_settings['PROVISIONING_PROFILE_SPECIFIER'] = ''");
+                sw.WriteLine("config.build_settings['CODE_SIGNING_REQUIRED'] = 'NO'");
+                sw.WriteLine("config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'");
+                sw.WriteLine("end");
+                sw.WriteLine("end");
+            }
+        }
+    }
 
     /// <summary>
     /// Build後の自動処理.

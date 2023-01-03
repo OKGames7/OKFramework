@@ -14,8 +14,8 @@ public class DevelopmentBuildSetting : IBuildSetting {
     private BuildOptions _buildOptions;
 
     // シンボル情報.
-    //(AA;BB;CCという形で列挙する).
     private readonly string _scriptingDefineSymbols = "DEVELOPMENT";
+    private readonly string _startCommonModuleDebugScene = "COMMON_MODULE_DEBUG";
 
     void IBuildSetting.SetupBuildSettins(BuildTarget target, bool isUpStore) {
 
@@ -69,6 +69,12 @@ public class DevelopmentBuildSetting : IBuildSetting {
             var architecture = isUpStore ? AndroidArchitecture.ARM64 : AndroidArchitecture.ARMv7;
             PlayerSettings.Android.targetArchitectures = architecture;
 
+            // 最低APIレベル(OSバージョン)の設定.
+            // '22/11月現在では最低はLevel30(Adnroid 11.0)以上でないとストア申請できない.
+            // 開発デバッグ用としてAppCenterにあげる場合はスペック下限に近い端末でデバッグできるようにさらに下のLevelで設定している.
+            PlayerSettings.Android.minSdkVersion = isUpStore ? AndroidSdkVersions.AndroidApiLevel30 : AndroidSdkVersions.AndroidApiLevel29;
+
+
             if (isUpStore) {
                 // Google Play StoreへUpする際はキーストアによる署名がされていないとUpできない.
                 if (!string.IsNullOrEmpty(BuildArgs.KeyStorePath) && !string.IsNullOrEmpty(BuildArgs.KeyStorePass)
@@ -93,7 +99,8 @@ public class DevelopmentBuildSetting : IBuildSetting {
             }
 
             // シンボル設定.
-            PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.Android, _scriptingDefineSymbols);
+            string symbols = BuildArgs.IsStartCommonModuleDebugScene ? $"{_scriptingDefineSymbols};{_startCommonModuleDebugScene}" : _scriptingDefineSymbols;
+            PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.Android, symbols);
         }
 
         if (target == BuildTarget.iOS) {
@@ -104,7 +111,7 @@ public class DevelopmentBuildSetting : IBuildSetting {
                 Log.Warning("buildNumberの設定はされていません");
             }
             PlayerSettings.iOS.applicationDisplayName = AppConst.AppNameDevelopment; // 開発用を設定.
-            PlayerSettings.iOS.appleEnableAutomaticSigning = true;
+            PlayerSettings.iOS.appleEnableAutomaticSigning = false;
 
             // IL2CPP設定.
             PlayerSettings.SetScriptingBackend(BuildTargetGroup.iOS, ScriptingImplementation.IL2CPP);
@@ -113,7 +120,8 @@ public class DevelopmentBuildSetting : IBuildSetting {
             PlayerSettings.iOS.scriptCallOptimization = ScriptCallOptimizationLevel.SlowAndSafe;
 
             // シンボルの設定.
-            PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.iOS, _scriptingDefineSymbols);
+            string symbols = BuildArgs.IsStartCommonModuleDebugScene ? $"{_scriptingDefineSymbols};{_startCommonModuleDebugScene}" : _scriptingDefineSymbols;
+            PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.iOS, symbols);
         }
     }
 
@@ -144,7 +152,7 @@ public class DevelopmentBuildSetting : IBuildSetting {
         if (target == BuildTarget.iOS) {
             // 広告対応でcocoapodsを入れたが、デフォルトだとxcworkspaceも出力されるになった。
             // xcprojのみの出力で良いのでその設定をここでしている.
-            var integration = Google.IOSResolver.CocoapodsIntegrationMethod.Project;
+            var integration = Google.IOSResolver.CocoapodsIntegrationMethod.Workspace;
             Google.IOSResolver.CocoapodsIntegrationMethodPref = integration;
         }
     }
