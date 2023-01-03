@@ -17,12 +17,15 @@ namespace OKGamesLib {
         private enum Type {
             OK,
             NG,
+            Self,
         }
 
         /// <summary>
         /// 設定するサウンドのタイプ
         /// </summary>
         [SerializeField] private Type _type;
+
+        [SerializeField] private AudioClip _clip;
 
         private IAudioPlayer _sePlaer;
         private IResourceStore _resourceStore;
@@ -57,8 +60,7 @@ namespace OKGamesLib {
         /// <param name="address">再生するSEのAudioClipのAddressablesのアドレス.</param>
         private void PlaySE(string address) {
             // 再生するSEの取得.
-            AudioClip clip = _resourceStore.GetAudio(address);
-
+            AudioClip clip = _type == Type.Self ? _clip : _resourceStore.GetAudio(address);
             // SEの再生.
             _sePlaer.Play(clip);
         }

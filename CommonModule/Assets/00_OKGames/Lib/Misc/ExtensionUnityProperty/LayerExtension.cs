@@ -28,11 +28,20 @@ namespace OKGamesLib {
                 case LayerName.LayerNameEnum.UI:
                     mask = LayerMasks.LayerMasksEnum.UI;
                     break;
+                case LayerName.LayerNameEnum.Dialog:
+                    mask = LayerMasks.LayerMasksEnum.Dialog;
+                    break;
+                case LayerName.LayerNameEnum.PopText:
+                    mask = LayerMasks.LayerMasksEnum.PopText;
+                    break;
                 case LayerName.LayerNameEnum.TransitionBoard:
                     mask = LayerMasks.LayerMasksEnum.TransitionBoard;
                     break;
                 case LayerName.LayerNameEnum.NowLoading:
                     mask = LayerMasks.LayerMasksEnum.NowLoading;
+                    break;
+                case LayerName.LayerNameEnum.SystemDialog:
+                    mask = LayerMasks.LayerMasksEnum.SystemDialog;
                     break;
                 case LayerName.LayerNameEnum.Character:
                     mask = LayerMasks.LayerMasksEnum.Character;

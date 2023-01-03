@@ -1,3 +1,5 @@
+#if DEVELOPMENT || DEBUG_SIMPLEPROFILE_UI
+using System.Text;
 using UnityEngine;
 using UnityEngine.Profiling;
 using UnityEngine.UI;
@@ -12,7 +14,7 @@ namespace OKGamesLib {
         /// <summary>
         /// プロファイラ情報を表示するテキスト.
         /// </summary>
-        [SerializeField] protected Text text = null;
+        [SerializeField] protected TextWrapper text = null;
 
         /// <summary>
         /// 表示更新する時間間隔.
@@ -33,6 +35,8 @@ namespace OKGamesLib {
         /// 更新までにかかった経過時間.
         /// </summary>
         private float _passedTime;
+
+        private StringBuilder _sb = new StringBuilder();
 
         /// <summary>
         /// 毎フレーム行う処理.
@@ -56,7 +60,7 @@ namespace OKGamesLib {
             var usedMemory = Profiler.GetTotalAllocatedMemoryLong() / 1024f / 1024f;
             var unusedMemory = Profiler.GetTotalUnusedReservedMemoryLong() / 1024f / 1024f;
 
-            Display(fps, totalMemory, usedMemory, unusedMemory);
+            Display(fps.ToString("0.0"), totalMemory.ToString("0.0"), usedMemory.ToString("0.0"), unusedMemory.ToString("0.0"));
         }
 
         /// <summary>
@@ -66,11 +70,13 @@ namespace OKGamesLib {
         /// <param name="totalMemory">使用できる合計メモリ量.</param>
         /// <param name="usedMemory">現在使用しているメモリ量.</param>
         /// <param name="unusedMemory">未使用のメモリ量.</param>
-        protected virtual void Display(float fps, float totalMemory, float usedMemory, float unusedMemory) {
-            text.text =
-               "[FPS] " + fps.ToString("0.0") + "\n"
-               + "[Memory] " + totalMemory.ToString("0.0") + " MB\n"
-               + " - Used: " + usedMemory.ToString("0.0") + " MB";
+        protected virtual void Display(string fps, string totalMemory, string usedMemory, string unusedMemory) {
+            _sb.Clear();
+            _sb.Append($"        [FPS] {fps} \n");
+            _sb.Append($"[Memory] {totalMemory} MB\n");
+            _sb.Append($"      - Used {usedMemory} MB\n");
+            text.SetText(_sb.ToString());
         }
     }
 }
+#endif

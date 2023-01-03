@@ -24,23 +24,17 @@ namespace OKGamesFramework {
         private bool _useGlobalAudioListener = false;
         private IResourceStore _resourceStore = null;
 
-        private Fade _screenFader = null;
+        private IFader _screenFader = null;
+
+        private IInputBlocker _inputBlocker = null;
 
 
-        public void Init(IBootConfig bootConfig, IResourceStore resourceStore, GameObject fadeScreenRootObject) {
+        public void Init(IBootConfig bootConfig, IResourceStore resourceStore, IFader fader, IInputBlocker inputBlocker) {
             _useGlobalAudioListener = bootConfig.useGlobalAudioListener;
             _resourceStore = resourceStore;
 
-            _screenFader = fadeScreenRootObject.GetComponentInChildren<Fade>();
-            _screenFader.Init();
-        }
-
-        public async UniTask InitSceneAsync() {
-            // 開始シーンはタイトルとする.
-            // ISceneContext context = new TitleContext();
-            ISceneContext context = new OKGamesTest.TestBootContext();
-
-            await GoToNextScene(context);
+            _screenFader = fader;
+            _inputBlocker = inputBlocker;
         }
 
         /// <summary>
@@ -53,6 +47,12 @@ namespace OKGamesFramework {
 
             CurrentSceneContext?.Update();
             SceneUpdate?.Invoke();
+        }
+
+        public async UniTask GoFirstScene() {
+            // 開始シーンはBootとする.
+            ISceneContext context = new BootSceneContext();
+            await GoToNextScene(context);
         }
 
         public async UniTask GoToNextScene(ISceneContext nextSceneContext, float fadeOutTime = 0.3f, float fadeInTime = 0.3f) {
@@ -96,6 +96,8 @@ namespace OKGamesFramework {
                 return;
             }
             IsInTransition = true;
+
+            _inputBlocker.AddBusyProcess();
 
             // フェードイン処理
             if (useCutomTransiton && CurrentSceneContext != null) {
@@ -149,6 +151,8 @@ namespace OKGamesFramework {
 
             IsInTransition = false;
             CurrentSceneContext?.OnStartupScene();
+
+            _inputBlocker.ReduceBusyProcess();
         }
 
         /// <summary>

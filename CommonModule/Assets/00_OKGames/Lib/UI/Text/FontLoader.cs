@@ -57,33 +57,17 @@ namespace OKGamesLib {
             return font;
         }
 
-        public int GetFontSize(Language lang, TextConst.Theme theme) {
-            int size = -1;
-            switch (theme) {
-                case TextConst.Theme.Free:
-                    // offsetの値 = 文字サイズとする.
-                    size = 0;
+        public float GetFontSize(float japTextSize, Language lang) {
+            float offset = 0.0f;
+            switch (lang) {
+                case Language.Ja:
+                    offset = 0.0f;
                     break;
-                case TextConst.Theme.DialogTitle:
-                    size = 36;
-                    break;
-                case TextConst.Theme.ADVTtitle:
-                    size = 32;
-                    break;
-                case TextConst.Theme.ButtonLavel:
-                case TextConst.Theme.ListItemLabel:
-                case TextConst.Theme.DialogContent:
-                case TextConst.Theme.ADVContent:
-                    size = 30;
+                case Language.En:
+                    offset = 4.0f;
                     break;
             }
-
-            if (lang != Language.Ja) {
-                // 日本語を基準にそれ以外(アルファベット)だったら一律4pt大きいサイズとする.
-                size += 4;
-            }
-
-            return size;
+            return japTextSize + offset;
         }
 
         public Color GetFontColor(TextConst.ColorType type) {

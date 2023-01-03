@@ -111,6 +111,16 @@ namespace OKGamesLib {
         }
 
         /// <summary>
+        /// ローカルスケールを設定する.
+        /// </summary>
+        /// <param name="transform">設定するTransform.</param>
+        /// <param name="size">x, y, z共通のサイズ.</param>
+        public static void SetLocalScale(this Transform transform, float size) {
+            _vec.Set(size, size, size);
+            transform.localScale = _vec;
+        }
+
+        /// <summary>
         /// ローカルスケールを現在のサイズからAddする.
         /// </summary>
         /// <param name="transform">設定するTransform.</param>

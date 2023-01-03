@@ -21,12 +21,13 @@ namespace OKGamesLib {
         /// <typeparam name="T"><see cref="PoolableBehaviour"/>を継承したクラス.</typeparam>
         /// <param name="original">プールさせたいオブジェクト.</param>
         /// <param name="reserveNum">プールさせたい数.</param>
+        /// <param name="parent">プールしたオブジェクトの親階層とさせたいオブジェクト.</param>
         /// <returns>オブジェクトのプール.</returns>
-        public ObjectPool<T> CreatePool<T>(GameObject original, int reserveNum) where T : PoolableBehaviour {
+        public ObjectPool<T> CreatePool<T>(GameObject original, int reserveNum, GameObject parent) where T : PoolableBehaviour {
             Type behaviourType = typeof(T);
             CheckMultipleCreate(behaviourType);
 
-            var objectPool = new ObjectPool<T>(original, reserveNum);
+            var objectPool = new ObjectPool<T>(original, reserveNum, parent);
             _poolDict.Add(behaviourType, objectPool);
             return objectPool;
         }
@@ -40,7 +41,7 @@ namespace OKGamesLib {
             Type behaviourType = typeof(T);
             IObjectPool objectPool;
             if (!_poolDict.TryGetValue(behaviourType, out objectPool)) {
-                throw new Exception($"[AltoObjectPoolRegistry] Object Pool not initialized : {behaviourType}");
+                throw new Exception($"[ObjectPoolRegistry] Object Pool not initialized : {behaviourType}");
             }
             return (ObjectPool<T>)objectPool;
         }

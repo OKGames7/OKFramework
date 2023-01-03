@@ -92,6 +92,7 @@ namespace OKGamesLib {
             _resourceStore = resourceStore;
 
             sceneDIrector.SceneUpdate += OnSceneUpdate;
+            Log.Notice("AudioPlayer Init確認.");
         }
 
         public void Play(
@@ -171,6 +172,7 @@ namespace OKGamesLib {
             var states = (audioClip != null)
                 ? _sourcePool.GetByPlayingAudioClipList(audioClip)
                 : _sourcePool.GetPlayingList();
+
 
             if (states.Count == 0) { return; }
 

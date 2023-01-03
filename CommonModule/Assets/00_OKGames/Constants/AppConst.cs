@@ -23,5 +23,7 @@ public class AppConst {
     public const string AdmobInterstitialIDIOS = "";
     public const string AdmobInterstitialIDAndroid = "";
 
+    public const string AppleStoreAppURL = "";
+    public const string GoogleStoreAppURL = "";
 
 }

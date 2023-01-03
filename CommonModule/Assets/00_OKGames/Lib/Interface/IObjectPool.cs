@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace OKGamesLib {
 
     /// <summary>
@@ -9,7 +11,7 @@ namespace OKGamesLib {
         /// 指定数オブジェクトを生成する.
         /// </summary>
         /// <param name="num">プールを生成する数.</param>
-        void Reserve(int num);
+        void Reserve(int num, GameObject parent);
 
         /// <summary>
         /// 使用していたGameObjectを非活性にしてプールに返す.

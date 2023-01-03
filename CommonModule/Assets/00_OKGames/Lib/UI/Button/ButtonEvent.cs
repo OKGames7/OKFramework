@@ -30,9 +30,11 @@ namespace OKGamesLib {
                     if (!Validation()) {
                         return;
                     }
+                    self.InputBlocker.AddBusyProcess();
                     self.SetRunning(true);
                     _onAction();
                     self.SetRunning(false);
+                    self.InputBlocker.ReduceBusyProcess();
                 })
                 .AddTo(self);
         }
@@ -43,12 +45,15 @@ namespace OKGamesLib {
         public static void SetClickActionAsync(this ButtonWrapper self, Func<UniTask> _onFunc) {
             self.Button.onClick.AddListener(
                 async () => {
+                    Log.Notice("ボタン押しは呼ばれた");
                     if (!Validation()) {
                         return;
                     }
+                    self.InputBlocker.AddBusyProcess();
                     self.SetRunning(true);
                     await _onFunc();
                     self.SetRunning(false);
+                    self.InputBlocker.ReduceBusyProcess();
                 });
         }
 
@@ -61,9 +66,11 @@ namespace OKGamesLib {
                     if (!Validation()) {
                         return;
                     }
+                    self.InputBlocker.AddBusyProcess();
                     self.SetRunning(true);
                     _onAction(arg);
                     self.SetRunning(false);
+                    self.InputBlocker.ReduceBusyProcess();
                 })
                 .AddTo(self);
         }
@@ -77,9 +84,11 @@ namespace OKGamesLib {
                     if (!Validation()) {
                         return;
                     }
+                    self.InputBlocker.AddBusyProcess();
                     self.SetRunning(true);
                     await _onFunc(arg);
                     self.SetRunning(false);
+                    self.InputBlocker.ReduceBusyProcess();
                 });
         }
 
@@ -92,9 +101,11 @@ namespace OKGamesLib {
                     if (!Validation()) {
                         return;
                     }
+                    self.InputBlocker.AddBusyProcess();
                     self.SetRunning(true);
                     _onAction(arg1, arg2);
                     self.SetRunning(false);
+                    self.InputBlocker.ReduceBusyProcess();
                 })
                 .AddTo(self);
         }
@@ -108,9 +119,11 @@ namespace OKGamesLib {
                     if (!Validation()) {
                         return;
                     }
+                    self.InputBlocker.AddBusyProcess();
                     self.SetRunning(true);
                     await _onFunc(arg1, arg2);
                     self.SetRunning(false);
+                    self.InputBlocker.ReduceBusyProcess();
                 });
         }
 
@@ -123,9 +136,11 @@ namespace OKGamesLib {
                     if (!Validation()) {
                         return;
                     }
+                    self.InputBlocker.AddBusyProcess();
                     self.SetRunning(true);
                     _onAction(arg1, arg2, arg3);
                     self.SetRunning(false);
+                    self.InputBlocker.ReduceBusyProcess();
                 })
                 .AddTo(self);
         }
@@ -139,10 +154,19 @@ namespace OKGamesLib {
                     if (!Validation()) {
                         return;
                     }
+                    self.InputBlocker.AddBusyProcess();
                     self.SetRunning(true);
                     await _onFunc(arg1, arg2, arg3);
                     self.SetRunning(false);
+                    self.InputBlocker.ReduceBusyProcess();
                 });
+        }
+
+        /// <summary>
+        /// 設定したクリックアクションをButtonのListerから削除する(引数なし)
+        /// </summary>
+        public static void RemoveAllClickActions(this ButtonWrapper self) {
+            self.Button.onClick.RemoveAllListeners();
         }
     }
 }

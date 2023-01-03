@@ -1,6 +1,6 @@
 using UnityEngine;
 
-#if (UNITY_IOS && !UNITY_EDITOR) || (UNITY_ANDROID && !UNITY_EDITOR)
+#if UNITY_IOS || UNITY_ANDROID
 using Cysharp.Threading.Tasks;
 using UniRx;
 #endif
@@ -11,64 +11,35 @@ namespace OKGamesLib {
     /// <summary>
     /// ストアでのレビューを促す機能.
     /// </summary>
-    public class StoreReview : MonoBehaviour {
+    public class StoreReview {
 
-        // どこからでもアクセスできるようにインスタンス化.
-        private static StoreReview _instance;
-        public static StoreReview Instance {
-            get {
-                if (!_instance) {
-                    System.Type type = typeof(StoreReview);
-                    _instance = (StoreReview)FindObjectOfType(type);
-                    if (!_instance) {
-                        GameObject obj = new GameObject(type.ToString(), type);
-                        _instance = obj.GetComponent<StoreReview>();
-                    }
-                }
-
-                if (!Instance) {
-                    Log.Error("Not Found StoreReviewManager.");
-                }
-
-                return _instance;
-            }
-        }
-
-        /// <summary>
-        /// 初期化.
-        /// </summary>
-        private void Awake() {
-            // シーンを跨いだときなど、外部の影響で破棄されないようにする.
-            DontDestroyOnLoad(gameObject);
-        }
-
-        public void RequestReview() {
-#if UNITY_IOS && !UNITY_EDITOR
+        public static void RequestReview() {
+#if UNITY_IOS
             // iOS.
             ReqeusReviewIOS();
-#elif UNITY_ANDROID && !UNITY_EDITOR
+#elif UNITY_ANDROID
             // Android.
-            ReqeusReviewAndoirdAsync().Forget();
+            // ReqeusReviewAndoirdAsync().Forget();
 #else
             Log.Warning("ストアのレビュー促進機能は現在のプレイ環境では対応していません");
 #endif
         }
 
 
-#if UNITY_IOS && !UNITY_EDITOR
+#if UNITY_IOS
         /// <summary>
         /// ストアでのレビューを促すダイアログを表示する(iOS用)
         /// </summary>
-        private void ReqeusReviewIOS() {
+        private static void ReqeusReviewIOS() {
             UnityEngine.iOS.Device.RequestStoreReview();
         }
 #endif
 
-#if UNITY_ANDROID && !UNITY_EDITOR
+#if UNITY_ANDROID
         /// <summary>
         /// ストアでのレビューを促すダイアログを表示する(Android用)
         /// </summary>
-        private async UniTask ReqeusReviewAndoirdAsync() {
+        private static async UniTask ReqeusReviewAndoirdAsync() {
             var reviewManager = new Google.Play.Review.ReviewManager();
             var requestFlowOperation = reviewManager.RequestReviewFlow();
             await requestFlowOperation;

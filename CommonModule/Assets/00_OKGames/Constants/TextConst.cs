@@ -2,12 +2,9 @@ namespace OKGamesLib {
 
     public class TextConst {
 
-        public enum ColorType {
-            Normal,
-            Caution,
-            Important,
-            CompareUp,
-            CompareDown,
+        public enum FontType {
+            Auto,
+            Self,
         }
 
         public enum Theme {
@@ -20,6 +17,15 @@ namespace OKGamesLib {
 
             ADVTtitle,
             ADVContent,
+        }
+
+        public enum ColorType {
+            Normal,
+            Caution,
+            Important,
+            CompareUp,
+            CompareDown,
+            Self,
         }
     }
 }

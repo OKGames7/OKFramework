@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using System;
 
 namespace OKGamesLib {
 
@@ -10,7 +11,7 @@ namespace OKGamesLib {
         /// <summary>
         /// 初期化済みか.
         /// </summary>
-        bool IsInit { get; }
+        bool IsInitialized();
 
         /// <summary>
         /// 初期化処理
@@ -30,7 +31,8 @@ namespace OKGamesLib {
         /// <summary>
         /// インタースティシャル広告をを表示する.
         /// </summary>
-        void ShowInterstitial();
+        /// <param name="wrapper">広告閉じた際に行うコールバック.</param>
+        void ShowInterstitial(Action endCallback);
 
 
     }

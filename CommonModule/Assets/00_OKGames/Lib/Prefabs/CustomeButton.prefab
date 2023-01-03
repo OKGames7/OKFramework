@@ -96,6 +96,7 @@ MonoBehaviour:
   _button: {fileID: 1317802098657555051}
   _animation: {fileID: 1317802098657555052}
   _sound: {fileID: 1317802098657555053}
+  _textWrapper: {fileID: 8605093109045182618}
 --- !u!114 &1317802098657555052
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -146,7 +147,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 1, g: 1, b: 1, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -234,8 +235,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Test IAP
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 815ba3c38db714f3caac5a89f7864e23, type: 2}
-  m_sharedMaterial: {fileID: 3495747677415575848, guid: 815ba3c38db714f3caac5a89f7864e23, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 272c69ad3de9846c1871f95502ef1be9, type: 2}
+  m_sharedMaterial: {fileID: -3694954498390318370, guid: 272c69ad3de9846c1871f95502ef1be9, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

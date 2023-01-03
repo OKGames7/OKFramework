@@ -11,10 +11,13 @@ namespace OKGamesLib
         Ignore_Raycast  = 4,
         Water           = 16,
         UI              = 32,
+        Dialog          = 64,
+        PopText         = 128,
         TransitionBoard = 256,
         NowLoading      = 512,
-        Character       = 1024,
-        TapEffect       = 2048,
+        SystemDialog    = 1024,
+        Character       = 2048,
+        TapEffect       = 4096,
       }
     }
 }

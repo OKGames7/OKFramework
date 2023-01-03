@@ -21,6 +21,11 @@ namespace OKGamesLib {
         /// </summary>
         private RectTransform _rect;
 
+        private ITween _pressTween;
+
+        private ITween _resetTween;
+
+
         /// <summary>
         /// 押下時のスケール縮小比率.
         /// </summary>
@@ -58,9 +63,12 @@ namespace OKGamesLib {
         /// </summary>
         private void PlayPressAnimation() {
             float currentRatio = _rect.localScale.x / 1.0f;
-            OKGames.Tween(_button.gameObject)
+            _pressTween = OKGames.Tween(_button.gameObject)
                 .FromTo(currentRatio, _ratioAnimationScale, _pressAnimationDuration)
                 .OnUpdate(ratio => {
+                    if (_rect == null) {
+                        return;
+                    }
                     _rect.SetLocalScale(ratio);
                 });
         }
@@ -70,9 +78,12 @@ namespace OKGamesLib {
         /// </summary>
         private void PlayResetAnimation() {
             float currentRatio = _rect.localScale.x / 1.0f;
-            OKGames.Tween(_button.gameObject)
+            _resetTween = OKGames.Tween(_button.gameObject)
                 .FromTo(currentRatio, 1.0f, _pressAnimationDuration)
                 .OnUpdate(ratio => {
+                    if (_rect == null) {
+                        return;
+                    }
                     _rect.SetLocalScale(ratio);
                 });
         }

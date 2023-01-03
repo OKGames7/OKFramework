@@ -5,5 +5,6 @@ namespace OKGamesLib {
     /// </summary>
     public interface IObjectPoolHub {
         ObjectPoolRegistry SceneScopeObjectPoolRegistry { get; }
+        ObjectPoolRegistry GlobalScopeObjectPoolRegistry { get; }
     }
 }

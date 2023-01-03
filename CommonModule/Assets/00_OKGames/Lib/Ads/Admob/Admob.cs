@@ -1,6 +1,7 @@
 using OKGamesLib;
 using Cysharp.Threading.Tasks;
 using GoogleMobileAds.Api;
+using System;
 
 namespace OKGamesLib {
 
@@ -12,17 +13,13 @@ namespace OKGamesLib {
         /// <summary>
         /// バナー型の広告制御クラス.
         /// </summary>
-        private AdmobBanner _banner;
+        private AdmobBanner _banner = new AdmobBanner();
 
         /// <summary>
         /// インタースティシャル型の広告制御クラス.
         /// </summary>
-        private AdmobInterstitial _interstitial;
+        private AdmobInterstitial _interstitial = new AdmobInterstitial();
 
-        /// <summary>
-        /// <see cref="IAdmob.IsInit"/>
-        /// </summary>
-        public bool IsInit => _isInit;
         public bool _isInit = false;
 
         // OSのApp Tracking Transparencyの使用許可があるか
@@ -30,6 +27,14 @@ namespace OKGamesLib {
         // iOSはAppleのガイドラインで選択状態を取得する必要あり(一度も答えたことがなければ初回のみOSのダイアログで追跡機能を利用してよいかユーザーへ尋ねる).
         private bool _isATTPermission = false;
 
+
+        /// <summary>
+        /// <see cref="IAdmob.IsInitialized"/>
+        /// この関数内の処理順番は意図的に記述していっている部分が多いのでむやみに変えないこと.
+        /// </summary>
+        public bool IsInitialized() {
+            return _isInit && _banner.IsBannerLoaded & _interstitial.IsInterstitialLoaded;
+        }
 
         /// <summary>
         /// <see cref="IAdmob.InitAsync"/>
@@ -57,10 +62,8 @@ namespace OKGamesLib {
 
             await UniTask.WaitUntil(() => _isInit);
 
-            _banner = new AdmobBanner();
             await _banner.InitAsync(_isATTPermission);
 
-            _interstitial = new AdmobInterstitial();
             await _interstitial.InitAsync(_isATTPermission);
 
             Log.Notice("【Admob】 広告SDKの初期化終了.");
@@ -70,7 +73,7 @@ namespace OKGamesLib {
         /// <see cref="IAdmob.ShowBanner"/>
         /// </summary>
         public void ShowBanner() {
-            if (_isInit) {
+            if (!IsInitialized()) {
                 Log.Warning("【Admob】: 初期化処理がまだされていないので処理できません.");
                 return;
             }
@@ -81,7 +84,7 @@ namespace OKGamesLib {
         /// <see cref="IAdmob.HideBanner"/>
         /// </summary>
         public void HideBanner() {
-            if (_isInit) {
+            if (!IsInitialized()) {
                 Log.Warning("【Admob】: 初期化処理がまだされていないので処理できません.");
                 return;
             }
@@ -92,12 +95,12 @@ namespace OKGamesLib {
         /// <see cref="IAdmob.ShowInterstitial"/>
         /// 本広告は閉じた時の処理に破棄処理がされる作りになっていて非表示は外部公開していない.)
         /// </summary>
-        public void ShowInterstitial() {
-            if (_isInit) {
+        public void ShowInterstitial(Action endCallback) {
+            if (!IsInitialized()) {
                 Log.Warning("【Admob】: 初期化処理がまだされていないので処理できません.");
                 return;
             }
-            _interstitial.Show();
+            _interstitial.Show(endCallback);
         }
 
 #if UNITY_IOS && !UNITY_EDITOR

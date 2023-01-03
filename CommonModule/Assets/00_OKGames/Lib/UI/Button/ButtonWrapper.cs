@@ -29,10 +29,15 @@ namespace OKGamesLib {
 
         [SerializeField] private ButtonSound _sound;
 
+        [SerializeField] private TextWrapper _textWrapper;
+
         /// <summary>
         /// UniTaksの中断用.
         /// </summary>
         private readonly CancellationTokenSource _cancelTokenSource = new CancellationTokenSource();
+
+        public IInputBlocker InputBlocker => _inputBlocker;
+        private IInputBlocker _inputBlocker;
 
         /// <summary>
         /// 初期化処理
@@ -41,6 +46,8 @@ namespace OKGamesLib {
         /// </summary>
         private void Awake() {
             _isRunningProcess.AddTo(this);
+
+            _inputBlocker = OKGames.Context.InputBlocker;
 
             var adapter = OKGames.Context.UI.ButtonAdapter;
             adapter.Setup(this).Forget();
@@ -64,11 +71,32 @@ namespace OKGamesLib {
         }
 
         /// <summary>
-        /// ボタンコンポーネントのinteractableを設定する.
+        /// ボタン機能のオン/オフ.
         /// </summary>
-        /// <param name="isActive">活性化させるかどうか.</param>
-        public void SetInteractable(bool isActive) {
-            _button.interactable = isActive;
+        /// <param name="enable">機能のオン/オフ.</param>
+        public void SetButtonEnable(bool enable) {
+            if (_button.enabled == enable) {
+                // 状態が一致していたら何も処理しない.
+                return;
+            }
+
+            _button.enabled = enable;
+        }
+
+        /// <summary>
+        /// ボタン内のTextを設定する.
+        /// </summary>
+        /// <param name="str"></param>
+        public void SetText(string str) {
+            _textWrapper.SetText(str);
+        }
+
+        /// <summary>
+        /// ボタン内のTextをテキストマスターのkeyから設定する.
+        /// </summary>
+        /// <param name="str"></param>
+        public void SetTextByKey(string key) {
+            _textWrapper.SetTextByKey(key);
         }
 
         /// <summary>
@@ -82,6 +110,7 @@ namespace OKGamesLib {
             _animation = null;
             _sound = null;
             _button = null;
+            _textWrapper = null;
         }
     }
 }

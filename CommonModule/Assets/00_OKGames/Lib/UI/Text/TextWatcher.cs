@@ -34,7 +34,7 @@ namespace OKGamesLib {
             await UniTask.WhenAll(tasks);
 
             for (int i = 0; i < _wrapperList.Count; ++i) {
-                _wrapperList[i].ShowByKey();
+                _wrapperList[i].SetTextByKey();
             }
         }
     }

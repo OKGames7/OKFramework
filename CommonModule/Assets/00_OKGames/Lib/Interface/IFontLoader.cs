@@ -32,10 +32,10 @@ namespace OKGamesLib {
         /// <summary>
         /// 言語とテキスト表示部のテーマごとにフォントサイズを取得する.
         /// </summary>
-        /// <param name="lang">表示するテキストの言語.</param>
+        /// <param name="japTextSize">表示する日本語テキストのサイズ.</param>
         /// <param name="theme">表示するテキストのテーマ.</param>
         /// <returns>フォントサイズ.</returns>
-        int GetFontSize(Language lang, TextConst.Theme theme);
+        float GetFontSize(float japTextSize, Language lang);
 
         /// <summary>
         /// フォントテキストの色を取得.

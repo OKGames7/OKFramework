@@ -107,7 +107,7 @@ namespace OKGamesLib {
 
             var module = StandardPurchasingModule.Instance();
             module.useFakeStoreAlways = true;
-            module.useFakeStoreUIMode = FakeStoreUIMode.DeveloperUser;
+            module.useFakeStoreUIMode = FakeStoreUIMode.Default;
             var builder = ConfigurationBuilder.Instance(module);
             if (Application.platform == RuntimePlatform.Android) {
                 // Androidのみコンビニ決済方法による課金がある.

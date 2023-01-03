@@ -12,7 +12,7 @@ namespace OKGamesLib {
     public class AdmobInterstitial {
 
         private InterstitialAd _interstitialView;
-        private bool _isInterstitialLoaded = false;
+        public bool IsInterstitialLoaded = false;
         private bool _isAttPermission = false;
 
         /// <summary>
@@ -20,7 +20,7 @@ namespace OKGamesLib {
         /// </summary>
         /// <param name="isATTPermission">ユーザー好みの広告表示のためにOSのトラッキング機能を使って良いかの使用許可があるか.</param>
         public async UniTask InitAsync(bool isATTPermission) {
-            if (_isInterstitialLoaded) {
+            if (IsInterstitialLoaded) {
                 Log.Warning("【AdmobInterstitial】: 二度目の初期化を行おうとしています");
                 return;
             }
@@ -62,7 +62,7 @@ namespace OKGamesLib {
             // ロードできたら非表示にする.
             _interstitialView.OnAdLoaded += (_, _) => {
                 // インタースティシャルはバナーと違ってロード終了時に表示はされないので非表示にする処理は不要.
-                _isInterstitialLoaded = true;
+                IsInterstitialLoaded = true;
             };
 
             // 失敗時は原因が追跡できるように詳細にログを出す.
@@ -81,7 +81,7 @@ namespace OKGamesLib {
 
             _interstitialView.LoadAd(request);
 
-            await UniTask.WaitUntil(() => _isInterstitialLoaded);
+            await UniTask.WaitUntil(() => IsInterstitialLoaded);
 
             Log.Notice("【AdmobInterstitial】広告SDKのバナー生成終了.");
         }
@@ -89,7 +89,7 @@ namespace OKGamesLib {
         /// <summary>
         /// viewを表示する.
         /// </summary>
-        public void Show() {
+        public void Show(Action endCallback) {
             if (_interstitialView == null) {
                 Log.Warning("【AdmobInterstitial】インタースティシャル広告の参照がありません");
                 return;
@@ -99,6 +99,13 @@ namespace OKGamesLib {
                 Log.Warning("【AdmobInterstitial】インタースティシャル広告の用意(ロード)ができていません");
                 return;
             }
+
+            _interstitialView.OnAdFailedToLoad += (_, args) => {
+                endCallback();
+            };
+            _interstitialView.OnAdClosed += (_, args) => {
+                endCallback();
+            };
 
             _interstitialView.Show();
         }

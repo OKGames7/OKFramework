@@ -121,9 +121,9 @@ namespace OKGamesLib {
                 return;
             }
 
-            _fadeProgress = dt;
+            _fadeProgress += dt;
             float volumeRate = CalcVolumeRate(_fadeProgress, _fadeTime, _volumeFrom, _volumeTo);
-            Source.volume = (_volumeTo - _volumeFrom) * volumeRate * _volumeFrom;
+            Source.volume = (_volumeTo - _volumeFrom) * volumeRate + _volumeFrom;
 
             if (_fadeProgress >= _fadeTime) {
                 isFading = false;
@@ -160,7 +160,7 @@ namespace OKGamesLib {
                 return rate * rate;
             }
 
-            return 1.0f - (1f - rate) * (1f - rate);
+            return 1.0f - (1.0f - rate) * (1.0f - rate);
         }
     }
 }

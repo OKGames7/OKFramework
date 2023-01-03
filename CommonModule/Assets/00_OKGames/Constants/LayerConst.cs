@@ -3,7 +3,6 @@
 // ---------------------------------------------------------
 public class LayerConst {
 
-
     // Canvas用のレイヤー.
     // Tags and LayersのSortingLayersLayersの内容と一致させる.
     // 通常時はMiddleを使う.

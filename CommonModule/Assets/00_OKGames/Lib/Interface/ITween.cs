@@ -73,5 +73,10 @@ namespace OKGamesLib {
         /// <param name="canvasGroup">変化させるCanvasのグループ.></param>
         /// <returns>ITween.</returns>
         ITween SetAlpha(CanvasGroup canvasGroup);
+
+        /// <summary>
+        /// 即時終了させる.
+        /// </summary>
+        void Complete();
     }
 }

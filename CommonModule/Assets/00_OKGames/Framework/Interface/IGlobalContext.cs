@@ -9,6 +9,8 @@ namespace OKGamesFramework {
     /// </summary>
     public interface IGlobalContext {
 
+        GameObject ContextGameObject { get; }
+
         ISceneDirector SceneDirector { get; }
 
         IUI UI { get; }
@@ -18,6 +20,8 @@ namespace OKGamesFramework {
         IResourceStore ResourceStore { get; }
 
         IUserDataStore UserDataStore { get; }
+
+        GameObject AudioSourceGameObj { get; }
 
         IAudioPlayer BgmPlayer { get; }
 
@@ -29,7 +33,16 @@ namespace OKGamesFramework {
 
         IObjectPoolHub ObjectPoolHub { get; }
 
-        GameObject ContextGameObject { get; }
+        IPrev Prev { get; }
+
+        IInputBlocker InputBlocker { get; }
+
+
+        IIAP IAP { get; }
+
+        IAdmob Ads { get; }
+
+
 
         /// <summary>
         /// 非同期で済む部分の初期化処理.

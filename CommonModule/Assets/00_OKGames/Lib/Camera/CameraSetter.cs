@@ -100,14 +100,23 @@ namespace OKGamesLib {
                 case LayerName.LayerNameEnum.Character:
                     baseDepth = 100;
                     break;
-                case LayerName.LayerNameEnum.TransitionBoard:
+                case LayerName.LayerNameEnum.Dialog:
                     baseDepth = 200;
                     break;
-                case LayerName.LayerNameEnum.NowLoading:
+                case LayerName.LayerNameEnum.PopText:
                     baseDepth = 300;
                     break;
-                case LayerName.LayerNameEnum.TapEffect:
+                case LayerName.LayerNameEnum.TransitionBoard:
                     baseDepth = 400;
+                    break;
+                case LayerName.LayerNameEnum.NowLoading:
+                    baseDepth = 500;
+                    break;
+                case LayerName.LayerNameEnum.SystemDialog:
+                    baseDepth = 600;
+                    break;
+                case LayerName.LayerNameEnum.TapEffect:
+                    baseDepth = 700;
                     break;
                 case LayerName.LayerNameEnum.Debug:
                     baseDepth = 900;
@@ -138,8 +147,11 @@ namespace OKGamesLib {
                 case LayerName.LayerNameEnum.Water:
                     break;
                 case LayerName.LayerNameEnum.UI:
+                case LayerName.LayerNameEnum.Dialog:
+                case LayerName.LayerNameEnum.PopText:
                 case LayerName.LayerNameEnum.NowLoading:
                 case LayerName.LayerNameEnum.Debug:
+                case LayerName.LayerNameEnum.SystemDialog:
                     transform.localPosition = Vector3.zero;
                     transform.localRotation = Quaternion.identity;
                     transform.localScale = Vector3.one;

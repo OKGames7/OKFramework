@@ -5,8 +5,6 @@ using UniRx;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.Services.Core;
-using Unity.Services.Core.Environments;
 
 namespace OKGamesFramework {
 
@@ -61,20 +59,16 @@ namespace OKGamesFramework {
             get { return Context.TweenerHub.SceneScopeTweener; }
         }
 
-        /// <summary>
-        /// 広告機能のrootクラス.
-        /// </summary>
-        private static IAdmob _ads = null;
         public static IAdmob Ads {
-            get { return _ads; }
+            get { return Context.Ads; }
         }
 
-        /// <summary>
-        /// 課金のrootクラス.
-        /// </summary>
-        private static IIAP _iap = null;
         public static IIAP Iap {
-            get { return _iap; }
+            get { return Context.IAP; }
+        }
+
+        public static IUI UI {
+            get { return Context.UI; }
         }
 
         /// <summary>
@@ -83,104 +77,61 @@ namespace OKGamesFramework {
         /// </summary>
         public static bool IsInit { get; private set; } = false;
 
+        /// <summary>
+        /// 制作しているPJ側の開始遷移挙動を取るために使用するフラグ.
+        /// </summary>
+        public static bool IsPJRoutine { get; set; } = false;
 
         /// <summary>
         /// ゲームプレイ時に一番初めに呼び出される処理.
         /// ゲーム起動時のメインループの一番頭の処理とする.
         /// </summary>
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        private static void Initialize() {
+        private static void Init() {
             if (IsInit) {
                 Log.Warning("【OKGames】: 初期化済み.");
                 return;
             }
+            Log.Notice("【OKGames】: Init Start.");
 
-            // 実機だとUniTaks側のプレイヤープール設定がこのタイミングより遅く, awaitなどを用いるとエラーが出る。
-            // そのためUniTaks側のawaitが使えるように明示的にここでUniTask側のPlayerLoopの設定する.
-            var loop = UnityEngine.LowLevel.PlayerLoop.GetCurrentPlayerLoop();
-            PlayerLoopHelper.Initialize(ref loop, InjectPlayerLoopTimings.Minimum);
+            // 初期化(同期)の実処理.
+            var initializer = new OKGamesInitializer();
+            _context = initializer.Init();
 
-            // eventsystemの生成.
-            var eventSystem = new GameObject("EventSystem");
-            eventSystem.AddComponent<UnityEngine.EventSystems.EventSystem>();
-            eventSystem.AddComponent<UnityEngine.EventSystems.StandaloneInputModule>();
-            GameObject.DontDestroyOnLoad(eventSystem);
-
-#if DEVELOPMENT
-            // 実機でもログを確認するアセットの生成.
-            var debugConsole = Resources.Load("IngameDebugConsole") as GameObject;
-            GameObject.Instantiate(debugConsole);
-            // コマンド登録.
-            var debugCommandRegister = new OKGamesTest.DebugLogCommandRegisgter();
-            debugCommandRegister.Register();
-#endif
-
-            Log.Notice("【OKGames】: Initialize Start.");
-
-            _context = new GlobalContext();
-            _context.Init();
-
-            _ads = new Admob();
-#if UNITY_EDITOR
-            // _iap = new IAP();
-            _iap = new DebugIAP();
-#else
-            _iap = new IAP();
-#endif
-            Log.Notice("【OKGames】: Initialize End.");
-
-            InitializeAsync().Forget();
+            // 非同期で初期化が必要な部分の初期化処理を行う.
+            InitAsync(_context).Forget();
         }
 
         /// <summary>
         /// ゲームプレイ時に一番初めに呼び出される処理.
         /// ゲーム起動時のメインループの一番頭の処理とする.
         /// </summary>
-        private static async UniTask InitializeAsync() {
+        private static async UniTask InitAsync(IGlobalContext globalContex) {
             if (IsInit) {
                 Log.Warning("【OKGames】: 初期化済み.");
                 return;
             }
 
-            Log.Notice("【OKGames】: InitializeAsync Start.");
+            // 初期化(非同期)の実処理.
+            var initializer = new OKGamesInitializer();
+            await initializer.InitAsync(globalContex);
 
-            // GlobalContexの非同期初期化.
-            var InitContextAsync = _context.InitAsync();
-
-            // 広告機能の非同期初期化.
-            // 広告処理は初期化が長いのと待たなくてもアプリは機能するので同期させていない.
-            _ads.InitAsync().Forget();
-
-            // UnityServiceの初期化(IAPで使用する)
-            var options = new InitializationOptions().SetEnvironmentName("production");
-            var unityServiceInitAsync = UnityServices.InitializeAsync(options).ToObservable().ToUniTask();
-
-            await UniTask.WhenAll(InitContextAsync, unityServiceInitAsync);
-
-            // 1フレ待ってUnityのAwakeが呼ばれるまで待つ.
-            await UniTask.Yield();
-
-            //-- 以下にUnityのAwake処理以降でないと処理できない処理を記述している.--
-
-            // UnityServiceは使用しない.
-            UnityEngine.Analytics.Analytics.enabled = false;
-            UnityEngine.Analytics.Analytics.deviceStatsEnabled = false;
-            UnityEngine.Analytics.Analytics.limitUserTracking = true;
-            UnityEngine.Analytics.Analytics.initializeOnStartup = false;
-
-            // 課金機能の非同期初期化.
-            var itemMaster = Context.ResourceStore.GetObj<Entity_platform_item>(AssetAddress.AssetAddressEnum.platform_items.ToString());
-            var productList = itemMaster.GetItemsByCurrentPlatform().ConvertToStoreItem().ToArray();
-            var iapAsync = _iap.InitAsync(productList);
-
-            // UnityServiceを使った機能の初期化はここで併せて待つ.
-            await UniTask.WhenAll(iapAsync);
-
-            // シーンの初期化.
-            await Context.SceneDirector.InitSceneAsync();
+            // 各種システムの初期化が終わってから最初のシーンを表示する.
+            IsPJRoutine = true;
 
             IsInit = true;
             Log.Notice("【OKGames】: InitializeAsync End.");
+        }
+
+        /// <summary>
+        /// ゲームプレイ時に一番初めに呼び出される処理.
+        /// ゲーム起動時のメインループの一番頭の処理とする.
+        /// </summary>
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        private static void InitDebugTool() {
+            // 初期化(同期)の実処理.
+            var initializer = new OKGamesInitializer();
+            initializer.InitDebugTool();
         }
 
         /// <summary>
@@ -256,8 +207,8 @@ namespace OKGamesFramework {
         /// <param name="original">プール元のオブジェクト.</param>
         /// <param name="reserveNum">プール数.</param>
         /// <returns></returns>
-        public static ObjectPool<T> CreateObjectPool<T>(GameObject original, int reserveNum) where T : PoolableBehaviour {
-            return Context.ObjectPoolHub.SceneScopeObjectPoolRegistry.CreatePool<T>(original, reserveNum);
+        public static ObjectPool<T> CreateObjectPool<T>(GameObject original, int reserveNum, GameObject parent = null) where T : PoolableBehaviour {
+            return Context.ObjectPoolHub.SceneScopeObjectPoolRegistry.CreatePool<T>(original, reserveNum, parent);
         }
 
         /// <summary>

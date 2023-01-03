@@ -10,7 +10,7 @@ namespace OKGamesLib {
     public class AdmobBanner {
 
         private BannerView _bannerView;
-        private bool _isBannerLoaded = false;
+        public bool IsBannerLoaded = false;
 
         /// <summary>
         /// 初期化.
@@ -18,7 +18,7 @@ namespace OKGamesLib {
         /// <param name="isATTPermission">ユーザー好みの広告表示のためにOSのトラッキング機能を使って良いかの使用許可があるか.</param>
         public async UniTask InitAsync(bool isATTPermission) {
 
-            if (_isBannerLoaded) {
+            if (IsBannerLoaded) {
                 Log.Warning("【AdmobBanner】: 二度目の初期化を行おうとしています");
                 return;
             }
@@ -47,7 +47,7 @@ namespace OKGamesLib {
             // ロードできたら非表示にする.
             _bannerView.OnAdLoaded += (_, _) => {
                 Hide();
-                _isBannerLoaded = true;
+                IsBannerLoaded = true;
             };
 
             // 失敗時は原因が追跡できるように詳細にログを出す.
@@ -65,7 +65,7 @@ namespace OKGamesLib {
             // バナーをリクエスト情報からロードする.
             _bannerView.LoadAd(request);
 
-            await UniTask.WaitUntil(() => _isBannerLoaded);
+            await UniTask.WaitUntil(() => IsBannerLoaded);
 
             Log.Notice("【AdmobBanner】広告SDKのバナー生成終了.");
         }

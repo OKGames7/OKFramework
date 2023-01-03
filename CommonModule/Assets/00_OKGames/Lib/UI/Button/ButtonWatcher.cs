@@ -32,24 +32,24 @@ namespace OKGamesLib {
                     isRunning => {
                         if (isRunning) {
                             ++_runningProcessNum;
-                            SetAllButtonsInteractable(false);
+                            SetEnableAllButtons(false);
                         } else {
                             --_runningProcessNum;
                             if (_runningProcessNum < 1) {
-                                // ボタン押下時の処理がされているボタンがなくなったら全てのボタンのinteractableをONにする.
-                                SetAllButtonsInteractable(true);
+                                // ボタン押下時の処理がされているボタンがなくなったら全てのボタン機能を活性化させる.
+                                SetEnableAllButtons(true);
                             }
                         }
                     }).AddTo(wrapper);
         }
 
         /// <summary>
-        /// リストの全てのボタンコンポーネントのintaractableを設定する.
+        /// リストの全てのボタンコンポーネントの機能のオン/オフを設定する.
         /// </summary>
-        /// <param name="isActive">活性化させるかどうか.</param>
-        private void SetAllButtonsInteractable(bool isActive) {
+        /// <param name="enable">機能のオン/オフ.</param>
+        private void SetEnableAllButtons(bool enable) {
             foreach (var button in _wrapperList) {
-                button.SetInteractable(isActive);
+                button.SetButtonEnable(enable);
             }
         }
 
@@ -67,7 +67,7 @@ namespace OKGamesLib {
                 _runningProcessNum = _wrapperList.Count;
 
                 if (_runningProcessNum < 1) {
-                    SetAllButtonsInteractable(true);
+                    SetEnableAllButtons(true);
                 }
             }
         }

@@ -21,9 +21,10 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 using UnityEngine;
+using OKGamesLib;
 using Cysharp.Threading.Tasks;
 
-public class Fade : MonoBehaviour {
+public class Fade : MonoBehaviour, IFader {
     private IFade fade;
 
     private float cutoutRange;
@@ -53,9 +54,7 @@ public class Fade : MonoBehaviour {
         cutoutRange = 0;
         fade.Range = cutoutRange;
 
-        if (action != null) {
-            action();
-        }
+        action?.Invoke();
     }
 
     private async UniTask FadeinTask(float time, System.Action action) {
@@ -69,9 +68,7 @@ public class Fade : MonoBehaviour {
         cutoutRange = 1;
         fade.Range = cutoutRange;
 
-        if (action != null) {
-            action();
-        }
+        action?.Invoke();
     }
 
     public async UniTask FadeOut(float time, System.Action action) {

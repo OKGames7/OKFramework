@@ -10,11 +10,14 @@ namespace OKGamesLib
         Ignore_Raycast  = 2,
         Water           = 3,
         UI              = 4,
-        TransitionBoard = 5,
-        NowLoading      = 6,
-        Character       = 7,
-        TapEffect       = 8,
-        Debug           = 9,
+        Dialog          = 5,
+        PopText         = 6,
+        TransitionBoard = 7,
+        NowLoading      = 8,
+        SystemDialog    = 9,
+        Character       = 10,
+        TapEffect       = 11,
+        Debug           = 12,
       }
     }
 }

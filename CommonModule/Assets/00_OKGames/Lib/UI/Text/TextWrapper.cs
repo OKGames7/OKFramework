@@ -16,11 +16,13 @@ namespace OKGamesLib {
 
         // デバッグしやすいようにInspectorViewへ出している.
         [SerializeField] private string _key = "";
-        [SerializeField] private int _sizeOffset = 0;
-        [SerializeField] private TextConst.Theme _theme = TextConst.Theme.Free;
+
+        [SerializeField] private TextConst.FontType _type = TextConst.FontType.Self;
         [SerializeField] private FontStyles _stryle = FontStyles.Normal;
         [SerializeField] private TextConst.ColorType _colorType = TextConst.ColorType.Normal;
+
         [SerializeField] private TextAlignmentOptions _alignment = TextAlignmentOptions.Center;
+
         [SerializeField] private TextMeshProUGUI _text = null;
 
         private Language _lang = Language.Ja;
@@ -46,7 +48,7 @@ namespace OKGamesLib {
 
             if (!string.IsNullOrEmpty(_key)) {
                 // テキストの表示.
-                ShowByKey();
+                SetTextByKey();
             }
         }
 
@@ -64,17 +66,19 @@ namespace OKGamesLib {
         /// 現在の変数情報からTextMeshProのコンポーネントへ各種設定を行う.
         /// </summary>
         public async UniTask Setup() {
-            // フォント設定.
-            TMP_FontAsset font = await _loader.GetFont(_lang);
-            // _text.font = font;
-            _text.font = font;
+            if (_type == TextConst.FontType.Auto) {
+                // フォント設定.
+                TMP_FontAsset font = await _loader.GetFont(_lang);
+                // _text.font = font;
+                _text.font = font;
+            }
 
             // スタイル設定.
             _text.fontStyle = _stryle;
 
             // サイズ設定.
-            int fontSize = _loader.GetFontSize(_lang, _theme);
-            _text.fontSize = fontSize + _sizeOffset;
+            float fontSize = _loader.GetFontSize(_text.fontSize, _lang);
+            _text.fontSize = fontSize;
 
             // オートサイズは処理が重いのと、決めのサイズ指定ができなくなるので使わない.
             _text.enableAutoSizing = false;
@@ -87,8 +91,10 @@ namespace OKGamesLib {
             _text.alignment = _alignment;
 
             // カラー設定.
-            Color color = _loader.GetFontColor(_colorType);
-            _text.color = color;
+            if (_colorType != TextConst.ColorType.Self) {
+                Color color = _loader.GetFontColor(_colorType);
+                _text.color = color;
+            }
 
             // タグを使用できるようにON.
             _text.richText = true;
@@ -99,36 +105,6 @@ namespace OKGamesLib {
             }
 
             _isSetup = true;
-        }
-
-
-        /// <summary>
-        /// テキストを表示する.
-        /// </summary>
-        /// <param name="text">表示するテキスト.</param>
-        public void Show(string text) {
-            _text.text = text;
-        }
-
-        /// <summary>
-        /// テキストマスターのキーを基にテキスト表示する.
-        /// </summary>
-        /// <param name="key"></param>
-        public void ShowByKey(string key = null) {
-            ShowByKeyAsync(key).Forget();
-        }
-
-        private async UniTask ShowByKeyAsync(string key = null) {
-            await UniTask.WaitUntil(() => _isSetup);
-
-            if (!string.IsNullOrEmpty(key)) {
-                _key = key;
-            }
-
-            if (!string.IsNullOrEmpty(_key)) {
-                var str = _textMaster.GetText(_key, _lang);
-                _text.text = str;
-            }
         }
 
         /// <summary>
@@ -144,6 +120,35 @@ namespace OKGamesLib {
         /// <param name="key">Textマスターのキー情報.</param>
         public void SetTextID(string key) {
             _key = key;
+        }
+
+        /// <summary>
+        /// テキストマスターのキーを基にテキスト表示する.
+        /// </summary>
+        /// <param name="key"></param>
+        public void SetTextByKey(string key = null) {
+            SetTextByKeyAsync(key).Forget();
+        }
+
+        private async UniTask SetTextByKeyAsync(string key = null) {
+            await UniTask.WaitUntil(() => _isSetup);
+
+            if (!string.IsNullOrEmpty(key)) {
+                _key = key;
+            }
+
+            if (!string.IsNullOrEmpty(_key)) {
+                var str = _textMaster.GetText(_key, _lang);
+                _text.text = str;
+            }
+        }
+
+        /// <summary>
+        /// テキストを設定する.
+        /// </summary>
+        /// <param name="text">表示するテキスト.</param>
+        public void SetText(string text) {
+            _text.text = text;
         }
 
         /// <summary>

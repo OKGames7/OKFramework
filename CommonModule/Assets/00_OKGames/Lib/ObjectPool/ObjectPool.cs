@@ -32,24 +32,28 @@ namespace OKGamesLib {
             get { return _pool.Count; }
         }
 
-
         /// <summary>
         /// コンストラクタ.
         /// </summary>
         /// <param name="original">プールするオブジェクト.</param>
         /// <param name="reserveNum">プールしたい数.</param>
-        public ObjectPool(GameObject original, int reserveNum = 64) {
+        /// <param name="parent">生成したオブジェクトの親階層.</param>
+        public ObjectPool(GameObject original, int reserveNum = 64, GameObject parent = null) {
             _original = original;
-            Reserve(reserveNum);
+            Reserve(reserveNum, parent);
         }
 
         /// <summary>
         /// オブジェクトのプールを生成する.
         /// </summary>
         /// <param name="num">プールしたい数.</param>
-        public void Reserve(int num) {
+        /// <param name="parent">生成したオブジェクトの親階層.</param>
+        public void Reserve(int num, GameObject parent = null) {
             for (var i = 0; i < num; ++i) {
                 var obj = Create();
+                if (parent != null) {
+                    obj.gameObject.SetParentAsFirstSibling(parent);
+                }
                 Return(obj);
             }
         }
